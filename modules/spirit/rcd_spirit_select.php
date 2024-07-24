@@ -6,6 +6,16 @@
 
 // Add a shortcode to display the API result
 function rcd_spirit_select_shortcode() {
+
+    // Enqueue the JavaScript file for the shortcode
+    wp_enqueue_script(
+        'rcd-spirit-select-script', 
+        plugin_dir_url(__FILE__) . 'rcd_spirit_select.js', 
+        array('jquery'), 
+        null, 
+        true
+    );
+    // establish endpoint
     $api_url = 'https://api.hereslife.com/rcd/spirit/titles';
 
     // Use wp_remote_get to fetch the API data
@@ -41,7 +51,9 @@ function rcd_spirit_select_shortcode() {
         }
         
         echo '</select>';
-        echo '<a href="https://example.com" class="wp-button">Click Me</a>';
+        echo '<div class="wp-block-button">
+       <a id="custom-button" class="wp-block-button__link wp-element-button">Our services</a>
+       </div>';
         echo '</form>';
     } else {
         echo 'No data available.';
