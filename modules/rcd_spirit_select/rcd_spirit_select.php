@@ -52,9 +52,11 @@ function rcd_spirit_select_shortcode() {
         
         echo '</select>';
         echo '<div class="wp-block-button">
-       <a id="custom-button" class="wp-block-button__link wp-element-button">Our services</a>
+       <a id="custom-button" 
+       class="wp-block-button__link wp-element-button">View Resource</a>
        </div>';
         echo '</form>';
+        echo '<div id="resource-container"></div>';
     } else {
         echo 'No data available.';
     }
