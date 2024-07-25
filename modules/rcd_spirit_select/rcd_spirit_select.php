@@ -16,7 +16,7 @@ function rcd_spirit_select_shortcode() {
         true
     );
     // establish endpoint
-    $api_url = 'https://api.hereslife.com/rcd/spirit/titles';
+    $api_url = API_ENDPOINT . '/rcd/spirit/titles';
 
     // Use wp_remote_get to fetch the API data
     $response = wp_remote_get($api_url);
@@ -41,8 +41,8 @@ function rcd_spirit_select_shortcode() {
     ob_start();
     
     if (!empty($data)) {
-        echo '<form>';
-        echo '<select name="language">';
+        echo '<form id="spirit-form">';
+        echo '<select id = "spirit-select" name="language">';
         
         foreach ($data as $item) {
             if (isset($item['languageName'])) {
@@ -51,10 +51,10 @@ function rcd_spirit_select_shortcode() {
         }
         
         echo '</select>';
-        echo '<div class="wp-block-button">
-       <a id="custom-button" 
-       class="wp-block-button__link wp-element-button">View Resource</a>
-       </div>';
+        echo '<div class="wp-block-button">';
+     echo '<button id="custom-button" type="submit" class="wp-block-button__link wp-element-button">View Resource</button>';
+
+       echo '</div>';
         echo '</form>';
         echo '<div id="resource-container"></div>';
     } else {
