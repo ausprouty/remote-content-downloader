@@ -1,7 +1,7 @@
 #download-form {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 5px; /* Reduced gap for less space between rows */
 }
 
 #download-form input[type="text"],
@@ -14,18 +14,13 @@
     box-sizing: border-box;
 }
 
+#download-form .checkbox-group {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+}
+
 #download-form input[type="checkbox"] {
     margin-right: 5px;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.checkbox-group label {
-    margin-left: 5px;
-    display: inline;
 }
 
 #download-form textarea {
