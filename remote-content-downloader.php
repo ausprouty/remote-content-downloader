@@ -6,7 +6,6 @@ Version: 1.0
 Author: Bob Prouty
 */
 
-
 // Define plugin directory
 define('RCD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RCD_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -17,7 +16,6 @@ function rcd_include_modules() {
     
     // Scan the modules directory
     $modules = array_filter(glob($modules_dir . '*'), 'is_dir');
-    
     
     foreach ($modules as $module_dir) {
         $module_name = basename($module_dir);
@@ -30,9 +28,20 @@ function rcd_include_modules() {
 }
 add_action('plugins_loaded', 'rcd_include_modules');
 
+// Localize variables without enqueuing scripts
+function rcd_localize_variables() {
+    wp_register_script('rcd-dummy-handle', ''); // Register a dummy script handle
 
+    $localize_data = array(
+        'apiEndpoint' => API_ENDPOINT,
+    );
 
+    wp_localize_script('rcd-dummy-handle', 'RCDSettings', $localize_data); // Localize the variables
+    wp_enqueue_script('rcd-dummy-handle'); // Enqueue the dummy script to make the localized variables available
+}
+add_action('wp_enqueue_scripts', 'rcd_localize_variables');
 
+// Add the rest of your logging functions here...
 function writeLog($filename, $content) {
     if (LOG_MODE !== 'write_log' && LOG_MODE !== 'write_time_log') {
         return;
@@ -101,5 +110,4 @@ function validateFilename($filename) {
     }
     return preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename); // Sanitize filename
 }
-
-
+?>

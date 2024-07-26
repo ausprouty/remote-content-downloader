@@ -16,7 +16,8 @@ function rcd_spirit_select_shortcode() {
         true
     );
     // establish endpoint
-    $api_url = API_ENDPOINT . '/rcd/spirit/titles';
+    $api_url = API_ENDPOINT . '/spirit/titles';
+    writeLogDebug('rcd_spirit_select_shortcode', $api_url);
 
     // Use wp_remote_get to fetch the API data
     $response = wp_remote_get($api_url);
