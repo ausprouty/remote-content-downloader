@@ -9,15 +9,26 @@ jQuery(document).ready(function($) {
     });
 
     $('#download-resource-button').on('click', function() {
-        console.log (formData)
-        var formData = $('#download-form').serialize() + '&file=' + $('.resource-download-link').data('file');
+        var formData = $('#download-form').serializeArray();
+        var file = $('.resource-download-link').data('file');
+        formData.push({name: 'file', value: file});
+
+        // Ensure RCDSettings and apiEndpoint are defined
+        if (typeof RCDSettings === 'undefined' || typeof RCDSettings.apiEndpoint === 'undefined') {
+            console.error('RCDSettings or apiEndpoint is not defined');
+            container.textContent = 'Error: apiEndpoint is not defined';
+            return;
+        }
+        const apiEndpoint = RCDSettings.apiEndpoint;
+        console.log(apiEndpoint);
+        const ajaxurl = apiEndpoint + '/materials/download';
         
         $.ajax({
             url: ajaxurl,
             type: 'POST',
             data: {
                 action: 'process_resource_download',
-                data: formData
+                formData: formData
             },
             success: function(response) {
                 if (response.success) {

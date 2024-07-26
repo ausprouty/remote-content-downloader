@@ -11,9 +11,11 @@ function rcd_link_select_shortcode($atts) {
         return '<p>Invalid file or name attribute.</p>';
     }
 
-    // Enqueue necessary scripts
+    // Enqueue necessary scripts and styles
     wp_enqueue_script('jquery');
-    wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery'), null, true);
+    wp_enqueue_script('jquery-ui-dialog');
+    wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery', 'jquery-ui-dialog'), null, true);
+    wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
 
     // Output the hyperlink
     $output = '<a href="#" class="resource-download-link" data-file="' . esc_attr($atts['file']) . '">' . esc_html($atts['name']) . '</a>';
@@ -35,33 +37,9 @@ function rcd_link_select_shortcode($atts) {
 }
 add_shortcode('rcd_link_select', 'rcd_link_select_shortcode');
 
-// Handle AJAX request
-function process_resource_download() {
-    // Validate and sanitize input data
-    $name = sanitize_text_field($_POST['name']);
-    $email = sanitize_email($_POST['email']);
-    $country = sanitize_text_field($_POST['country']);
-    $state = sanitize_text_field($_POST['state']);
-    $checkbox1 = isset($_POST['checkbox1']) ? 1 : 0;
-    $checkbox2 = isset($_POST['checkbox2']) ? 1 : 0;
-    $checkbox3 = isset($_POST['checkbox3']) ? 1 : 0;
-    $comments = sanitize_textarea_field($_POST['comments']);
-    $file = sanitize_text_field($_POST['file']);
-
-    // Log or process the form data as needed
-    // ...
-
-    // Generate the file URL
-    $file_url = site_url($file);
-
-    wp_send_json_success(array('file_url' => $file_url));
-}
-add_action('wp_ajax_process_resource_download', 'process_resource_download');
-add_action('wp_ajax_nopriv_process_resource_download', 'process_resource_download');
-
-// Enqueue jQuery UI for the popup
+// Enqueue jQuery UI CSS and JS
 function enqueue_jquery_ui() {
+    wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
     wp_enqueue_script('jquery-ui-dialog');
-    wp_enqueue_style('jquery-ui-css', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
 }
 add_action('wp_enqueue_scripts', 'enqueue_jquery_ui');
