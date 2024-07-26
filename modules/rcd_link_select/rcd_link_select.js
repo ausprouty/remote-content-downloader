@@ -16,12 +16,14 @@ jQuery(document).ready(function($) {
         // Ensure RCDSettings and apiEndpoint are defined
         if (typeof RCDSettings === 'undefined' || typeof RCDSettings.apiEndpoint === 'undefined') {
             console.error('RCDSettings or apiEndpoint is not defined');
-            container.textContent = 'Error: apiEndpoint is not defined';
             return;
         }
+        console.log('RCDSettings');
+        console.log(RCDSettings);
         const apiEndpoint = RCDSettings.apiEndpoint;
-        console.log(apiEndpoint);
+        
         const ajaxurl = apiEndpoint + '/materials/download';
+        console.log('ajaxurl', ajaxurl);
         
         $.ajax({
             url: ajaxurl,

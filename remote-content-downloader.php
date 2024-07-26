@@ -7,11 +7,13 @@ Author: Bob Prouty
 */
 
 // Define plugin directory
-define('RCD_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('RCD_PLUGIN_DIR', __DIR__ . '/');
 define('RCD_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+
+
 // Include logging functions
-include_once RCD_PLUGIN_DIR . 'logging-functions.php';
+include_once 'logging-functions.php';
 
 // Include module files
 function rcd_include_modules() {
@@ -24,7 +26,7 @@ function rcd_include_modules() {
         $module_name = basename($module_dir);
         $module_file = $modules_dir . $module_name . '/' . $module_name . '.php';
         if (file_exists($module_file)) {
-            writeLogDebug('rcd_include_modules', $module_file);
+            //writeLogDebug('rcd_include_modules', $module_file);
             include_once $module_file;
         }
     }

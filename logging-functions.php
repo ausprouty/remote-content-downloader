@@ -68,4 +68,3 @@ function validateFilename($filename) {
     }
     return preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename); // Sanitize filename
 }
-?>
