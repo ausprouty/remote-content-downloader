@@ -1,7 +1,7 @@
 #download-form {
     display: flex;
     flex-direction: column;
-    gap: 5px; /* Reduced gap for less space between rows */
+    gap: 5px;
 }
 
 #download-form input[type="text"],
@@ -24,9 +24,8 @@
 }
 
 .checkbox-group label {
-    margin-left: 0; /* Remove left margin to reduce indentation */
+    margin-left: 5px;
     display: inline;
-    padding-left: 5px; /* Optional: Add a small padding for better alignment */
 }
 
 #download-form textarea {

@@ -43,7 +43,7 @@ function rcd_link_select_shortcode($atts) {
     $output .= '<input type="checkbox" id="checkbox2" name="checkbox2"><label for="checkbox2">Checkbox 2</label>';
     $output .= '<input type="checkbox" id="checkbox3" name="checkbox3"><label for="checkbox3">Checkbox 3</label>';
     $output .= '</div>';
-    $output .= '<label for="comments">Comments:</label><br>';
+    
     $output .= '<textarea id="comments" name="comments" placeholder="How can we pray for you?"></textarea>';
     $output .= '<button type="button" id="download-resource-button">Download Resource</button>';
     $output .= '</form>';
