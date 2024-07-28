@@ -9,6 +9,13 @@ jQuery(document).ready(function($) {
     });
 
     $('#download-resource-button').on('click', function() {
+        var email = $('#email').val();
+        
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email address or leave it blank.');
+            return;
+        }
+        
         var formData = $('#download-form').serializeArray();
         var file = $('.resource-download-link').data('file');
         formData.push({name: 'file', value: file});
@@ -24,6 +31,7 @@ jQuery(document).ready(function($) {
         
         const ajaxurl = apiEndpoint + '/materials/download';
         console.log('ajaxurl', ajaxurl);
+        console.log (formData);
         
         $.ajax({
             url: ajaxurl,
@@ -33,8 +41,9 @@ jQuery(document).ready(function($) {
                 formData: formData
             },
             success: function(response) {
+                console.log(response);
                 if (response.success) {
-                    window.location.href = response.data.file_url;
+                    window.location.href = response.file_url;
                     $('#resource-download-form').dialog('close');
                 } else {
                     alert('There was an error processing your request.');
@@ -42,4 +51,12 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    function validateEmail(email) {
+        if (email === null || email.trim() === '') {
+            return true; // Allow null or empty email
+        }
+        var re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return re.test(email);
+    }
 });

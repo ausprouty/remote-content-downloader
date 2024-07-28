@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(apiEndpoint);
         
         // Update the resource container with selected value
-        container.textContent = 'button done';
         var url = apiEndpoint + '/spirit/text/' + selectedValue;
         console.log(url);
         

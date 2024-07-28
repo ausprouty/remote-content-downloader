@@ -13,7 +13,7 @@ define('RCD_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 
 // Include logging functions
-include_once 'logging-functions.php';
+include_once 'includes/logging-functions.php';
 
 // Include module files
 function rcd_include_modules() {

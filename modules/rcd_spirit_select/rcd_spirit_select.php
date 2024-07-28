@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: RCD Spirit Select
- * Description: Fetches and displays data from the RCD Spirit API.
+ * Description: Fetches and displays languages in which the Spirit Filled life is available.  When selected it will display the resource available in that language.
  */
 
 // Add a shortcode to display the API result
