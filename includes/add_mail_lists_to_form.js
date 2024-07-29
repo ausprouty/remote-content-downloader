@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Function to add selected mailing lists to the form
-    function addMailingListsToForm() {
+    // Function to add selected Mail lists to the form
+    function addMailListsToForm() {
         let selectedMailLists = [];
         let checkboxes = document.querySelectorAll('input[name="mail_lists[]"]:checked');
         
@@ -26,6 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listener to checkboxes
     let checkboxes = document.querySelectorAll('input[name="mail_lists[]"]');
     checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', addMailingListsToForm);
+        checkbox.addEventListener('change', addMailListsToForm);
     });
 });

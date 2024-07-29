@@ -3,7 +3,7 @@
 
 
 // Define mailing lists
-$mailing_lists = array(
+$mail_list_options = array(
     'followup' => 'Tell me how to help new Christians grow',
     'tips' => 'Send me tips on how to use this material',
     'start' => 'Give me ideas for starting my first group',

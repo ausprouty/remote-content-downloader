@@ -32,7 +32,7 @@ function enqueue_rcd_scripts_and_styles() {
     wp_enqueue_script('add_state_to_form', plugin_dir_url(__FILE__) . '../../includes/add_state_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
 
     // Enqueue add mail list to form file
-    wp_enqueue_script('add_mail_list_to_form', plugin_dir_url(__FILE__) . '../../includes/add_mail_list_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
+    wp_enqueue_script('add_mail_lists_to_form', plugin_dir_url(__FILE__) . '../../includes/add_mail_lists_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
 
     // Enqueue custom CSS file
     wp_enqueue_style('rcd_link_select_css', plugin_dir_url(__FILE__) . 'rcd_link_select.css', array(), null, 'all');
@@ -85,7 +85,7 @@ function rcd_link_select_shortcode($atts) {
     $output .= '</div>';
     
     // Get the communication options
-    foreach ($mailing_lists as $code => $description) {
+    foreach ($mail_list_options as $code => $description) {
         $output .= '<div class="checkbox-group">
                         <input type="checkbox" id="' . esc_attr($code) . '" name="mail_lists[]" value="' . esc_attr($code) . '">
                         <label for="' . esc_attr($code) . '">' . esc_html($description) . '</label>
