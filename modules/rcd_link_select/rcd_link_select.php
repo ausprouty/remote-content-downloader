@@ -61,7 +61,7 @@ function rcd_link_select_shortcode($atts) {
     }
     include_once plugin_dir_path(__FILE__) . '../../includes/select-options.php';
     // Include logging functions
-
+writeLogDebug('link_select-64', $atts);
     // Output the hyperlink
     $output = '<a href="#" class="resource-download-link" data-file="' . esc_attr($atts['file']) . '">' . esc_html($atts['name']) . '</a>';
     $output .= '<div id="resource-download-form" style="display:none;">';
@@ -83,13 +83,18 @@ function rcd_link_select_shortcode($atts) {
     // <!-- Options will be populated dynamically -->
     $output .= '</select>';
     $output .= '</div>';
-    
+
     // Get the communication options
-    foreach ($mail_list_options as $code => $description) {
-        $output .= '<div class="checkbox-group">
-                        <input type="checkbox" id="' . esc_attr($code) . '" name="mail_lists[]" value="' . esc_attr($code) . '">
-                        <label for="' . esc_attr($code) . '">' . esc_html($description) . '</label>
-                    </div>';
+    // Generate checkboxes for specified mail_lists
+    foreach ($atts['mail_lists'] as $code) {
+        $code = trim($code);
+        writeLogAppend('link_select-90', $code);
+        if (isset($mail_list_options[$code])) {
+            $output .= '<div class="checkbox-group">
+                            <input type="checkbox" id="' . esc_attr($code) . '" name="mail_lists[]" value="' . esc_attr($code) . '">
+                            <label for="' . esc_attr($code) . '">' . esc_html($mail_list_options[$code]) . '</label>
+                        </div>';
+        }
     }
     //  Prayer Request
     $output .= '<label for="prayer">How can we pray for you?</label>';

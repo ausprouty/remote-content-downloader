@@ -17,12 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const stateLabel = document.getElementById('state-label');
         
         stateSelect.style.display = 'none';
-        stateLabel.style.display = 'none';
         stateSelect.innerHTML = '';
         
         if (country === 'Australia' || country === 'United States') {
             stateContainer.style.visibility = 'visible';
-            stateLabel.style.display = 'block';
             stateSelect.style.display = 'block';
     
             if (country === 'Australia') {
