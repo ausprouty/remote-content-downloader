@@ -15,19 +15,22 @@ jQuery(document).ready(function($) {
             alert('Please enter a valid email address or leave it blank.');
             return;
         }
-        
-        var formData = $('#download-form').serializeArray();
-        var file = $('.resource-download-link').data('file');
-        formData.push({name: 'file', value: file});
-
         // Ensure RCDSettings and apiEndpoint are defined
         if (typeof RCDSettings === 'undefined' || typeof RCDSettings.apiEndpoint === 'undefined') {
             console.error('RCDSettings or apiEndpoint is not defined');
             return;
         }
-        console.log('RCDSettings');
-        console.log(RCDSettings);
         const apiEndpoint = RCDSettings.apiEndpoint;
+        const hlApiKey = RCDSettings.hlApiKey;            
+        
+        
+        var formData = $('#download-form').serializeArray();
+        var file = $('.resource-download-link').data('file');
+        formData.push({name: 'file', value: file});
+         // Add the API key to formData
+        formData.push({name: 'apiKey', value: hlApiKey});
+        
+
         
         const ajaxurl = apiEndpoint + '/materials/download';
         console.log('ajaxurl', ajaxurl);

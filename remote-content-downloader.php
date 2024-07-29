@@ -39,6 +39,7 @@ function rcd_localize_variables() {
 
     $localize_data = array(
         'apiEndpoint' => API_ENDPOINT,
+        'hlApiKey' => HL_API_KEY
     );
 
     wp_localize_script('rcd-dummy-handle', 'RCDSettings', $localize_data); // Localize the variables

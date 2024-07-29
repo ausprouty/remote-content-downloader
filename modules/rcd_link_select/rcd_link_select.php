@@ -36,6 +36,11 @@ function enqueue_rcd_scripts_and_styles() {
 
     // Enqueue custom CSS file
     wp_enqueue_style('rcd_link_select_css', plugin_dir_url(__FILE__) . 'rcd_link_select.css', array(), null, 'all');
+
+    // Pass the API key to the JavaScript file
+    wp_localize_script('add_mailing_list_to_form', 'hlApiConfig', array(
+        'apiKey' => WORDPRESS_HL_API_KEY
+    ));
 }
 add_action('wp_enqueue_scripts', 'enqueue_rcd_scripts_and_styles');
 
