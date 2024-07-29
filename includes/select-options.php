@@ -1,5 +1,18 @@
 
 <?php
+
+
+// Define mailing lists
+$mailing_lists = array(
+    'followup' => 'Tell me how to help new Christians grow',
+    'tips' => 'Send me tips on how to use this material',
+    'start' => 'Give me ideas for starting my first group',
+    'multiply' => 'I want to know how to get my groups to multiply',
+    'weekly' => 'Receive weekly emails',
+    'abc' => 'ABC\'s of Evangelism and Discipleship',
+    'habits' => 'Habits of effective evangelists'
+);
+
 $us_state_options = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", 
     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 

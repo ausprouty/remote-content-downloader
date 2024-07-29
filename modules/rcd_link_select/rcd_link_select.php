@@ -27,7 +27,13 @@ function enqueue_rcd_scripts_and_styles() {
 
     // Enqueue select options file
     wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery', 'jquery-ui-dialog'), null, true);
-    
+
+    // Enqueue add state to form file
+    wp_enqueue_script('add_state_to_form', plugin_dir_url(__FILE__) . '../../includes/add_state_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
+
+    // Enqueue add mail list to form file
+    wp_enqueue_script('add_mail_list_to_form', plugin_dir_url(__FILE__) . '../../includes/add_mail_list_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
+
     // Enqueue custom CSS file
     wp_enqueue_style('rcd_link_select_css', plugin_dir_url(__FILE__) . 'rcd_link_select.css', array(), null, 'all');
 }
@@ -37,8 +43,18 @@ function rcd_link_select_shortcode($atts) {
     // Shortcode attributes
     $atts = shortcode_atts(array(
         'file' => '', // Actual file name
-        'name' => ''  // User-friendly name
+        'name' => '', // User-friendly name
+        'mail_lists' => array(), // Mail lists to sign up for
     ), $atts, 'rcd_link_select');
+    
+    // Ensure mail_lists is an array
+    if (!is_array($atts['mail_lists'])) {
+        if (!empty($atts['mail_lists'])) {
+            $atts['mail_lists'] = explode(',', $atts['mail_lists']);
+        } else {
+            $atts['mail_lists'] = array();
+        }
+    }
     
     if (empty($atts['file']) || empty($atts['name'])) {
         return '<p>Invalid file or name attribute.</p>';
@@ -61,14 +77,23 @@ function rcd_link_select_shortcode($atts) {
     }
     $output .= '</select>';
     $output .= '</div>';
-    // Get the country options
-    $output .= '<input type="text" id="state" name="state" placeholder="State" >';
+    // Get the state options
+    $output .= '<div id="state-container" style="visibility:hidden;">';
+    $output .= '<select id="state" name="state" style="display:none;">';
+    // <!-- Options will be populated dynamically -->
+    $output .= '</select>';
+    $output .= '</div>';
+    
     // Get the communication options
-    $output .= '<div class="checkbox-group"><input type="checkbox" id="checkbox1" name="checkbox1"><label for="checkbox1">Checkbox 1</label></div>';
-    $output .= '<div class="checkbox-group"><input type="checkbox" id="checkbox2" name="checkbox2"><label for="checkbox2">Checkbox 2</label></div>';
-    $output .= '<div class="checkbox-group"><input type="checkbox" id="checkbox3" name="checkbox3"><label for="checkbox3">Checkbox 3</label></div>';
-    $output .= '<label for="comments">How can we pray for you?</label>';
-    $output .= '<textarea id="comments" name="comments" placeholder="Write your prayer request here..."></textarea>';
+    foreach ($mailing_lists as $code => $description) {
+        $output .= '<div class="checkbox-group">
+                        <input type="checkbox" id="' . esc_attr($code) . '" name="mail_lists[]" value="' . esc_attr($code) . '">
+                        <label for="' . esc_attr($code) . '">' . esc_html($description) . '</label>
+                    </div>';
+    }
+    //  Prayer Request
+    $output .= '<label for="prayer">How can we pray for you?</label>';
+    $output .= '<textarea id="prayer" name="prayer" placeholder="Write your prayer request here..."></textarea>';
     $output .= '<button type="button" id="download-resource-button">Download Resource</button>';
     $output .= '<div id="error" style="color: red;"></div>';
     $output .= '</form>';
