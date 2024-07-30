@@ -39,7 +39,7 @@ function enqueue_rcd_scripts_and_styles() {
 
     // Pass the API key to the JavaScript file
     wp_localize_script('add_mailing_list_to_form', 'hlApiConfig', array(
-        'apiKey' => WORDPRESS_HL_API_KEY
+        'apiKey' => HL_API_KEY
     ));
 }
 add_action('wp_enqueue_scripts', 'enqueue_rcd_scripts_and_styles');

@@ -29,9 +29,6 @@ jQuery(document).ready(function($) {
         formData.push({name: 'file', value: file});
          // Add the API key to formData
         formData.push({name: 'apiKey', value: hlApiKey});
-        
-
-        
         const ajaxurl = apiEndpoint + '/materials/download';
         console.log('ajaxurl', ajaxurl);
         console.log (formData);
