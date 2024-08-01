@@ -2,10 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to add selected mailing lists to the form
     function addMailingListsToForm() {
         let selectedMailLists = [];
-        let checkboxes = document.querySelectorAll('input[name="mail_lists[]"]:checked');
+        let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
         
         checkboxes.forEach(function(checkbox) {
-            selectedMailLists.push(checkbox.value);
+            if (checkbox.name.startsWith('mail_lists[')) {
+                selectedMailLists.push(checkbox.value);
+            }
         });
         
         let form = document.querySelector('form'); // Adjust the selector to target your specific form
@@ -24,8 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Add event listener to checkboxes
-    let checkboxes = document.querySelectorAll('input[name="mail_lists[]"]');
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', addMailingListsToForm);
+        if (checkbox.name.startsWith('mail_lists[')) {
+            checkbox.addEventListener('change', addMailingListsToForm);
+        }
     });
 });

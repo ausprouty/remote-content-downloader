@@ -22,8 +22,6 @@ jQuery(document).ready(function($) {
         }
         const apiEndpoint = RCDSettings.apiEndpoint;
         const hlApiKey = RCDSettings.hlApiKey;            
-        
-        
         var formData = $('#download-form').serializeArray();
         var file = $('.resource-download-link').data('file');
         formData.push({name: 'file', value: file});
@@ -32,7 +30,7 @@ jQuery(document).ready(function($) {
         const ajaxurl = apiEndpoint + '/materials/download';
         console.log('ajaxurl', ajaxurl);
         console.log (formData);
-        
+        // send the form data to the server
         $.ajax({
             url: ajaxurl,
             type: 'POST',
@@ -41,15 +39,20 @@ jQuery(document).ready(function($) {
                 formData: formData
             },
             success: function(response) {
-                console.log(response);
+                console.log ('response', response);
                 if (response.success) {
                     window.location.href = response.file_url;
                     $('#resource-download-form').dialog('close');
                 } else {
-                    alert('There was an error processing your request.');
+                    alert(response.message);
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error: ', status, error);
+                alert('An unexpected error occurred. Please try again later.');
             }
         });
+        
     });
 
     function validateEmail(email) {

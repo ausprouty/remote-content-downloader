@@ -96,7 +96,7 @@ writeLogDebug('link_select-64', $atts);
         writeLogAppend('link_select-90', $code);
         if (isset($mail_list_options[$code])) {
             $output .= '<div class="checkbox-group">
-                            <input type="checkbox" id="' . esc_attr($code) . '" name="mail_lists[]" value="' . esc_attr($code) . '">
+                            <input type="checkbox" id="' . esc_attr($code) . '" name="mail_lists['. $code .']" value="' . esc_attr($code) . '">
                             <label for="' . esc_attr($code) . '">' . esc_html($mail_list_options[$code]) . '</label>
                         </div>';
         }
