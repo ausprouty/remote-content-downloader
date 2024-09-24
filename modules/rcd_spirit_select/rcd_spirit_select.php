@@ -8,15 +8,14 @@
 add_shortcode('rcd_spirit_select', 'rcd_spirit_select_shortcode');
 
 /**
- * Shortcode to display the language select form for Spirit Filled life resources.
- *
- * This shortcode fetches available languages from the API and displays them in a `<select>` dropdown. When a language
- * is selected and the form is submitted, the corresponding resource will be dynamically fetched and displayed
- * directly below the form (handled via JavaScript).
- *
- * @return string The generated HTML for the form or an error message if the API request fails.
+ * Enqueue custom CSS and JS files for the plugin.
  */
-function rcd_spirit_select_shortcode() {
+function rcd_spirit_enqueue_assets() {
+    // Enqueue custom CSS file
+    wp_enqueue_style('rcd_spirit_select_css', 
+        plugin_dir_url(__FILE__) . 'rcd_spirit_select.css', 
+        array(), null, 'all');
+
     // Enqueue the JavaScript file for handling form submission and API interactions
     wp_enqueue_script(
         'rcd-spirit-select-script', 
@@ -25,7 +24,13 @@ function rcd_spirit_select_shortcode() {
         null, 
         true
     );
+}
+add_action('wp_enqueue_scripts', 'rcd_spirit_enqueue_assets');
 
+/**
+ * Shortcode to display the language select form for Spirit Filled life resources.
+ */
+function rcd_spirit_select_shortcode() {
     // Establish the API endpoint for fetching the available languages
     $api_url = API_ENDPOINT . '/spirit/titles';
     writeLogDebug('rcd_spirit_select_shortcode', $api_url); // Log the API URL for debugging
@@ -54,7 +59,7 @@ function rcd_spirit_select_shortcode() {
     
     // Check if data is available and output the form with the language select dropdown
     if (!empty($data)) {
-        echo '<form id="spirit-form">';
+        echo '<form  id="spirit-form">';
         echo '<select id="spirit-select" name="language">';
 
         // Loop through each item in the API response and create an option element for each language
@@ -64,7 +69,7 @@ function rcd_spirit_select_shortcode() {
             }
         }
         
-        echo '</select>';
+        echo '</select><br><br>';
         echo '<div class="wp-block-button">';
         echo '<button id="custom-button" type="submit" class="wp-block-button__link wp-element-button">View Resource</button>';
         echo '</div>';

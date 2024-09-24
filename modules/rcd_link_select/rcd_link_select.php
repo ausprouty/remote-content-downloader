@@ -66,7 +66,7 @@ function rcd_link_select_shortcode($atts) {
     }
     include_once plugin_dir_path(__FILE__) . '../../includes/select-options.php';
     // Include logging functions
-writeLogDebug('link_select-64', $atts);
+    writeLogDebug('link_select-64', $atts);
     // Output the hyperlink
     $output = '<a href="#" class="resource-download-link" data-file="' . esc_attr($atts['file']) . '">' . esc_html($atts['name']) . '</a>';
     $output .= '<div id="resource-download-form" style="display:none;">';
