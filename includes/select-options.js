@@ -1,5 +1,15 @@
-
-
+/**
+ * mail_list_options
+ * -----------------
+ * An object that stores mailing list options and their descriptions.
+ * Each key represents a unique mailing list identifier, and the value is the corresponding description.
+ * 
+ * Example usage:
+ * - 'followup' => 'Tell me how to help new Christians grow'
+ * - 'tips' => 'Send me tips on how to use this material'
+ *
+ * @type {Object}
+ */
 var mail_list_options = {
     'followup': 'Tell me how to help new Christians grow',
     'tips': 'Send me tips on how to use this material',
@@ -10,7 +20,17 @@ var mail_list_options = {
     'habits': 'Habits of effective evangelists'
 };
 
-
+/**
+ * us_state_options
+ * ----------------
+ * An array of state abbreviations for the United States.
+ * 
+ * Example:
+ * - "AL" => Alabama
+ * - "CA" => California
+ *
+ * @type {Array}
+ */
 var us_state_options = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", 
     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 
@@ -19,10 +39,34 @@ var us_state_options = [
     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
 ];
 
+/**
+ * aus_state_options
+ * -----------------
+ * An array of state and territory abbreviations for Australia.
+ * 
+ * Example:
+ * - "NSW" => New South Wales
+ * - "QLD" => Queensland
+ *
+ * @type {Array}
+ */
 var aus_state_options = [
     "NSW", "QLD", "SA", "TAS", "VIC", "WA", "ACT", "NT"
 ];
 
+/**
+ * country_options
+ * ---------------
+ * An array of country names.
+ * This list contains all the countries of the world and can be used in dropdown menus or selection fields.
+ *
+ * Example:
+ * - "Australia"
+ * - "United States"
+ * - "Canada"
+ *
+ * @type {Array}
+ */
 var country_options = [
     "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", 
     "Antigua and Barbuda", "Argentina", "Armenia", "Australia", 

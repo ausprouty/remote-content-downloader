@@ -1,13 +1,23 @@
 <?php
 /*
  * Plugin Name: RCD Spirit Select
- * Description: Fetches and displays languages in which the Spirit Filled life is available.  When selected it will display the resource available in that language.
+ * Description: Fetches and displays languages in which the Spirit Filled life is available. When selected it will display the resource available in that language.
  */
 
-// Add a shortcode to display the API result
-function rcd_spirit_select_shortcode() {
+// Register the shortcode
+add_shortcode('rcd_spirit_select', 'rcd_spirit_select_shortcode');
 
-    // Enqueue the JavaScript file for the shortcode
+/**
+ * Shortcode to display the language select form for Spirit Filled life resources.
+ *
+ * This shortcode fetches available languages from the API and displays them in a `<select>` dropdown. When a language
+ * is selected and the form is submitted, the corresponding resource will be dynamically fetched and displayed
+ * directly below the form (handled via JavaScript).
+ *
+ * @return string The generated HTML for the form or an error message if the API request fails.
+ */
+function rcd_spirit_select_shortcode() {
+    // Enqueue the JavaScript file for handling form submission and API interactions
     wp_enqueue_script(
         'rcd-spirit-select-script', 
         plugin_dir_url(__FILE__) . 'rcd_spirit_select.js', 
@@ -15,36 +25,39 @@ function rcd_spirit_select_shortcode() {
         null, 
         true
     );
-    // establish endpoint
-    $api_url = API_ENDPOINT . '/spirit/titles';
-    writeLogDebug('rcd_spirit_select_shortcode', $api_url);
 
-    // Use wp_remote_get to fetch the API data
+    // Establish the API endpoint for fetching the available languages
+    $api_url = API_ENDPOINT . '/spirit/titles';
+    writeLogDebug('rcd_spirit_select_shortcode', $api_url); // Log the API URL for debugging
+
+    // Fetch the API data using `wp_remote_get`
     $response = wp_remote_get($api_url);
 
-    // Check if the response is valid
+    // Check if the API request returned an error
     if (is_wp_error($response)) {
         return 'Unable to retrieve data from the API.';
     }
 
-    // Get the response body
+    // Retrieve the response body from the API call
     $body = wp_remote_retrieve_body($response);
 
-    // Decode the JSON response
+    // Decode the JSON response from the API
     $data = json_decode($body, true);
 
-    // Check if decoding was successful
+    // Check for JSON decoding errors
     if (json_last_error() !== JSON_ERROR_NONE) {
         return 'Error decoding the JSON response.';
     }
 
-    // Output the API data in a select form
+    // Start output buffering to capture form HTML
     ob_start();
     
+    // Check if data is available and output the form with the language select dropdown
     if (!empty($data)) {
         echo '<form id="spirit-form">';
-        echo '<select id = "spirit-select" name="language">';
-        
+        echo '<select id="spirit-select" name="language">';
+
+        // Loop through each item in the API response and create an option element for each language
         foreach ($data as $item) {
             if (isset($item['languageName'])) {
                 echo '<option value="' . esc_attr($item['languageName']) . '">' . esc_html($item['languageName']) . '</option>';
@@ -53,26 +66,15 @@ function rcd_spirit_select_shortcode() {
         
         echo '</select>';
         echo '<div class="wp-block-button">';
-     echo '<button id="custom-button" type="submit" class="wp-block-button__link wp-element-button">View Resource</button>';
-
-       echo '</div>';
+        echo '<button id="custom-button" type="submit" class="wp-block-button__link wp-element-button">View Resource</button>';
+        echo '</div>';
         echo '</form>';
-        echo '<div id="resource-container"></div>';
+        echo '<div id="resource-container"></div>'; // This container will display the selected resource
     } else {
         echo 'No data available.';
     }
 
+    // Return the generated HTML
     return ob_get_clean();
 }
-
-// Register the shortcode
-add_shortcode('rcd_spirit_select', 'rcd_spirit_select_shortcode');
-
-// Enqueue the shortcode in a template
-function rcd_spirit_select_template() {
-    echo do_shortcode('[rcd_spirit_select]');
-}
-
-// Hook into the appropriate action to display the API result on the front end
-add_action('wp_footer', 'rcd_spirit_select_template');
 ?>

@@ -6,7 +6,13 @@
 
 // Add a shortcode to display the API result
 function rcd_test_shortcode() {
-    $api_url = 'https://api.hereslife.com/rcd/test';
+    // Use the defined API_ENDPOINT from the environment or default to an empty string
+    $api_url = defined('API_ENDPOINT') ? API_ENDPOINT . '/rcd/test' : '';
+
+    // If the API endpoint is not set, return an error message
+    if (empty($api_url)) {
+        return 'API endpoint is not defined.';
+    }
 
     // Use wp_remote_get to fetch the API data
     $response = wp_remote_get($api_url);
@@ -43,5 +49,5 @@ function rcd_test_template() {
     echo do_shortcode('[rcd_test]');
 }
 
-// Hook into the appropriate action to display the API result on the front end
+// Hook into the appropriate action to display the API result on the front end in the footer
 add_action('wp_footer', 'rcd_test_template');

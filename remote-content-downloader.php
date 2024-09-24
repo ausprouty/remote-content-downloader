@@ -1,32 +1,50 @@
 <?php
 /*
 Plugin Name: Remote Content Downloader
-Description: To interact with database.
+Plugin URI: https://hereslife.com/remote-content-downloader
+Description: A plugin to interact with the database and download content remotely.
 Version: 1.0
 Author: Bob Prouty
+Author URI: https://hereslife.com
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: remote-content-downloader
+Requires PHP: 7.4
 */
 
-// Define plugin directory
-define('RCD_PLUGIN_DIR', __DIR__ . '/');
-define('RCD_PLUGIN_URL', plugin_dir_url(__FILE__));
+// Ensure the plugin directory is defined only once
+if (!defined('RCD_PLUGIN_DIR')) {
+    define('RCD_PLUGIN_DIR', __DIR__ . '/');
+}
 
+if (!defined('RCD_PLUGIN_URL')) {
+    define('RCD_PLUGIN_URL', plugin_dir_url(__FILE__));
+}
 
+// Include logging functions (assumes the 'includes/logging-functions.php' exists)
+if (file_exists(RCD_PLUGIN_DIR . 'includes/logging-functions.php')) {
+    include_once RCD_PLUGIN_DIR . 'includes/logging-functions.php';
+}
 
-// Include logging functions
-include_once 'includes/logging-functions.php';
-
-// Include module files
+// Include module files dynamically
+/**
+ * Include all module files.
+ *
+ * Scans the 'modules' directory and includes each module's main file.
+ *
+ * @return void
+ */
 function rcd_include_modules() {
     $modules_dir = RCD_PLUGIN_DIR . 'modules/';
     
-    // Scan the modules directory
+    // Scan the modules directory for subdirectories (modules)
     $modules = array_filter(glob($modules_dir . '*'), 'is_dir');
     
+    // Loop through each module directory and include the main PHP file
     foreach ($modules as $module_dir) {
         $module_name = basename($module_dir);
         $module_file = $modules_dir . $module_name . '/' . $module_name . '.php';
         if (file_exists($module_file)) {
-            //writeLogDebug('rcd_include_modules', $module_file);
             include_once $module_file;
         }
     }
@@ -34,15 +52,31 @@ function rcd_include_modules() {
 add_action('plugins_loaded', 'rcd_include_modules');
 
 // Localize variables without enqueuing scripts
+/**
+ * Localizes API and key data for front-end scripts.
+ *
+ * This function registers a dummy script handle and localizes variables to be used
+ * in front-end JavaScript.
+ *
+ * @return void
+ */
 function rcd_localize_variables() {
-    wp_register_script('rcd-dummy-handle', ''); // Register a dummy script handle
+    // Register a dummy script handle (since no actual script is being enqueued)
+    wp_register_script('rcd-dummy-handle', '');
 
+    // Localize data (API endpoint and API key)
     $localize_data = array(
-        'apiEndpoint' => API_ENDPOINT,
-        'hlApiKey' => HL_API_KEY
+        'apiEndpoint' => defined('API_ENDPOINT') ? API_ENDPOINT : '',
+        'hlApiKey'    => defined('HL_API_KEY') ? HL_API_KEY : ''
     );
 
-    wp_localize_script('rcd-dummy-handle', 'RCDSettings', $localize_data); // Localize the variables
-    wp_enqueue_script('rcd-dummy-handle'); // Enqueue the dummy script to make the localized variables available
+    // Localize the variables for front-end use
+    wp_localize_script('rcd-dummy-handle', 'RCDSettings', $localize_data);
+    
+    // Enqueue the dummy script (required to use wp_localize_script)
+    wp_enqueue_script('rcd-dummy-handle');
 }
 add_action('wp_enqueue_scripts', 'rcd_localize_variables');
+
+// Security best practices
+// Ensure that sensitive information is properly sanitized or escaped when necessary
