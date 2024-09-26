@@ -8,29 +8,11 @@
 add_shortcode('rcd_spirit_select', 'rcd_spirit_select_shortcode');
 
 /**
- * Enqueue custom CSS and JS files for the plugin.
- */
-function rcd_spirit_enqueue_assets() {
-    // Enqueue custom CSS file
-    wp_enqueue_style('rcd_spirit_select_css', 
-        plugin_dir_url(__FILE__) . 'rcd_spirit_select.css', 
-        array(), null, 'all');
-
-    // Enqueue the JavaScript file for handling form submission and API interactions
-    wp_enqueue_script(
-        'rcd-spirit-select-script', 
-        plugin_dir_url(__FILE__) . 'rcd_spirit_select.js', 
-        array('jquery'), 
-        null, 
-        true
-    );
-}
-add_action('wp_enqueue_scripts', 'rcd_spirit_enqueue_assets');
-
-/**
  * Shortcode to display the language select form for Spirit Filled life resources.
  */
 function rcd_spirit_select_shortcode() {
+    // Enqueue scripts and styles only when this shortcode is rendered
+    rcd_spirit_enqueue_assets();
     // Establish the API endpoint for fetching the available languages
     $api_url = API_ENDPOINT . '/spirit/titles';
     writeLogDebug('rcd_spirit_select_shortcode', $api_url); // Log the API URL for debugging
@@ -82,4 +64,24 @@ function rcd_spirit_select_shortcode() {
     // Return the generated HTML
     return ob_get_clean();
 }
+
+/**
+ * Enqueue custom CSS and JS files for the plugin.
+ */
+function rcd_spirit_enqueue_assets() {
+    // Enqueue custom CSS file
+    wp_enqueue_style('rcd_spirit_select_css', 
+        plugin_dir_url(__FILE__) . 'rcd_spirit_select.css', 
+        array(), null, 'all');
+
+    // Enqueue the JavaScript file for handling form submission and API interactions
+    wp_enqueue_script(
+        'rcd-spirit-select-script', 
+        plugin_dir_url(__FILE__) . 'rcd_spirit_select.js', 
+        array('jquery'), 
+        null, 
+        true
+    );
+}
+
 ?>

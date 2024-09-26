@@ -111,3 +111,58 @@ var country_options = [
     "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", 
     "Vietnam", "Yemen", "Zambia", "Zimbabwe"
 ];
+
+/**
+ * tractFormatOptions is an object that holds the available options for tract formats.
+ * Each key in the object represents a specific format, and the corresponding value is the description of that format.
+ * Example usage:
+ * Accessing the description for the 'PAGE' format.
+ * console.log(tractFormatOptions['PAGE']);  // Output: 'Print 6 page tract'
+ */
+const tractFormatOptions = {
+    'PAGE': 'Print 6 page tract',       // A tract format that allows users to print a 6-page tract.
+    'BOOKLET': 'Make my own booklets',  // A format for users who want to create their own booklets.
+    'TABLET': 'Show on a tablet',       // A format optimized for showing the tract on a tablet.
+    'PHONE': 'Download pdf for mobile phone',  // A mobile-friendly PDF download format for phones.
+    'VIEW': 'View on mobile phone',     // A format that allows users to view the tract directly on a mobile phone.
+    'BUY': 'Buy readymade tracts'       // An option for users who want to purchase pre-made tracts.
+};
+
+
+
+
+/**
+ * contactOptions is an object that holds the available contact locations.
+ * Each key in the object is an abbreviation for a country or region, and the value is the full name of the location.
+ * Example usage:
+ * Accessing the full name for the 'AU' contact option.
+ * console.log(contactOptions['AU']);  // Output: 'Australia'
+ */
+const contactOptions = {
+    'AU': 'Australia',           // Contact option for Australia.
+    'BR': 'Brazil',              // Contact option for Brazil.
+    'CM': 'Cambodia',            // Contact option for Cambodia.
+    'UC': 'Canada',              // Contact option for Canada.
+    'CH': 'China',               // Contact option for China.
+    'CY': 'Cyprus',              // Contact option for Cyprus.
+    'EU': 'Europe',              // Contact option for Europe.
+    'FR': 'France',              // Contact option for France.
+    'GE': 'Germany',             // Contact option for Germany.
+    'ID': 'Indonesia',           // Contact option for Indonesia.
+    'KO': 'Korea',               // Contact option for Korea.
+    'ME': 'Middle East',         // Contact option for the Middle East.
+    'NZ': 'New Zealand',         // Contact option for New Zealand.
+    'PH': 'Philippines',         // Contact option for the Philippines.
+    'PN': 'Pakistan',            // Contact option for Pakistan.
+    'RS': 'South Africa',        // Contact option for South Africa.
+    'SA': 'South America',       // Contact option for South America.
+    'SG': 'Singapore',           // Contact option for Singapore.
+    'TH': 'Thailand',            // Contact option for Thailand.
+    'UK': 'United Kingdom',      // Contact option for the United Kingdom.
+    'US': 'USA',                 // Contact option for the United States of America.
+    'UW': 'Local contact only'   // Contact option for a local-only contact.
+};
+
+
+
+

@@ -11,40 +11,11 @@ Version: 1.0
 Author: Bob Prouty
 */
 
-// Enqueue necessary scripts and styles
-function enqueue_rcd_scripts_and_styles() {
-    // Enqueue jQuery if not already included
-    wp_enqueue_script('jquery');
-    
-    // Enqueue jQuery UI Dialog
-    wp_enqueue_script('jquery-ui-dialog');
-    
-    // Enqueue jQuery UI CSS from an external source
-    wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
-    
-    // Enqueue custom JavaScript file
-    wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery', 'jquery-ui-dialog'), null, true);
-
-    // Enqueue select options file
-    wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery', 'jquery-ui-dialog'), null, true);
-
-    // Enqueue add state to form file
-    wp_enqueue_script('add_state_to_form', plugin_dir_url(__FILE__) . '../../includes/add_state_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
-
-    // Enqueue add mail list to form file
-    wp_enqueue_script('add_mail_lists_to_form', plugin_dir_url(__FILE__) . '../../includes/add_mail_lists_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
-
-    // Enqueue custom CSS file
-    wp_enqueue_style('rcd_link_select_css', plugin_dir_url(__FILE__) . 'rcd_link_select.css', array(), null, 'all');
-
-    // Pass the API key to the JavaScript file
-    wp_localize_script('add_mailing_list_to_form', 'hlApiConfig', array(
-        'apiKey' => HL_API_KEY
-    ));
-}
-add_action('wp_enqueue_scripts', 'enqueue_rcd_scripts_and_styles');
+add_shortcode('rcd_link_select', 'rcd_link_select_shortcode');
 
 function rcd_link_select_shortcode($atts) {
+
+    enqueue_rcd_scripts_and_styles();
     // Shortcode attributes
     $atts = shortcode_atts(array(
         'file' => '', // Actual file name
@@ -85,7 +56,6 @@ function rcd_link_select_shortcode($atts) {
     // Get the state options
     $output .= '<div id="state-container" style="visibility:hidden;">';
     $output .= '<select id="state" name="state" style="display:none;">';
-    // <!-- Options will be populated dynamically -->
     $output .= '</select>';
     $output .= '</div>';
 
@@ -111,5 +81,36 @@ function rcd_link_select_shortcode($atts) {
     
     return $output;
 }
-add_shortcode('rcd_link_select', 'rcd_link_select_shortcode');
+// Enqueue necessary scripts and styles
+function enqueue_rcd_scripts_and_styles() {
+    // Enqueue jQuery if not already included
+    wp_enqueue_script('jquery');
+    
+    // Enqueue jQuery UI Dialog
+    wp_enqueue_script('jquery-ui-dialog');
+    
+    // Enqueue jQuery UI CSS from an external source
+    wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
+    
+    // Enqueue custom JavaScript file
+    wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery', 'jquery-ui-dialog'), null, true);
+
+    // Enqueue select options file
+    wp_enqueue_script('rcd_link_select', plugin_dir_url(__FILE__) . 'rcd_link_select.js', array('jquery', 'jquery-ui-dialog'), null, true);
+
+    // Enqueue add state to form file
+    wp_enqueue_script('add_state_to_form', plugin_dir_url(__FILE__) . '../../includes/add_state_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
+
+    // Enqueue add mail list to form file
+    wp_enqueue_script('add_mail_lists_to_form', plugin_dir_url(__FILE__) . '../../includes/add_mail_lists_to_form.js', array('jquery', 'jquery-ui-dialog'), null, true);
+
+    // Enqueue custom CSS file
+    wp_enqueue_style('rcd_link_select_css', plugin_dir_url(__FILE__) . 'rcd_link_select.css', array(), null, 'all');
+
+    // Pass the API key to the JavaScript file
+    wp_localize_script('add_mailing_list_to_form', 'hlApiConfig', array(
+        'apiKey' => HL_API_KEY
+    ));
+}
+
 ?>

@@ -1,25 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('rcd-tracts-form');
+    const lang1Select = document.getElementById('lang1');
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
+    // Fetch data to populate lang1 on page load
+    const apiEndpoint = RCDSettings.apiEndpoint;
+    const lang1Url = `${apiEndpoint}/tracts/distinct/lang1`;
 
-        const lang1 = document.getElementById('lang1').value;
-        const lang2 = document.getElementById('lang2').value;
+    fetch(lang1Url)
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(item => {
+            const option = new Option(item.lang1, item.lang1);  // Create new option
+            lang1Select.appendChild(option);  // Append it to the select
+        });
+    })
+    .catch(error => console.error('Error fetching lang1 data:', error));
 
-        // Fetch data from API
-        const apiEndpoint = RCDSettings.apiEndpoint;
-        const url = `${apiEndpoint}/spirit/text/${lang1}/${lang2}`;  // Adjust the endpoint as necessary
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Display results in the results div
-                const resultsDiv = document.getElementById('rcd-tracts-results');
-                resultsDiv.innerHTML = `<p>Fetched Data: ${JSON.stringify(data)}</p>`;
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    });
+
 });
