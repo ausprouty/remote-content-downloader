@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
         }
     });
     
-    $('#rcd-tracts-form').on('submit', function(e) {
+    $('#rcd-tract-form').on('submit', function(e) {
         e.preventDefault();
         // Handle form submission logic
     });
