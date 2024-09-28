@@ -41,7 +41,7 @@ function rcd_spirit_select_shortcode() {
     
     // Check if data is available and output the form with the language select dropdown
     if (!empty($data)) {
-        echo '<form  id="spirit-form">';
+        echo '<form id="spirit-form">';
         echo '<select id="spirit-select" name="language">';
 
         // Loop through each item in the API response and create an option element for each language
@@ -70,18 +70,17 @@ function rcd_spirit_select_shortcode() {
  */
 function rcd_spirit_enqueue_assets() {
     // Enqueue custom CSS file
-    wp_enqueue_style('rcd_spirit_select_css', 
-        plugin_dir_url(__FILE__) . 'rcd_spirit_select.css', 
+    wp_enqueue_style('rcd-spirit-select-css', 
+        plugin_dir_url(__FILE__) . 'rcd-spirit-select.css', 
         array(), null, 'all');
 
     // Enqueue the JavaScript file for handling form submission and API interactions
     wp_enqueue_script(
         'rcd-spirit-select-script', 
-        plugin_dir_url(__FILE__) . 'rcd_spirit_select.js', 
+        plugin_dir_url(__FILE__) . 'rcd-spirit-select.js', 
         array('jquery'), 
         null, 
         true
     );
 }
-
 ?>
