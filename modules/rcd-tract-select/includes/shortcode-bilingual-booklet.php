@@ -1,11 +1,13 @@
 <?php
 function rcd_tracts_bilingual_booklet_select_form($atts) {
+    error_log('Bilingual Booklet Shortcode Registered'); // Debugging
+    return 'Bilingual Booklet Shortcode Test';
     $atts = shortcode_atts(array(
-        'tract_type' => 'bilingual-booklet',
+        'lang2' => 'English',
     ), $atts);
 
     // Enqueue the relevant script
-    rcd_tracts_enqueue_scripts($atts['tract_type']);
+    //rcd_tracts_enqueue_scripts($atts['tract_type']);
 
     ob_start();
     ?>

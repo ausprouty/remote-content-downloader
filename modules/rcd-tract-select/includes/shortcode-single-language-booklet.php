@@ -1,5 +1,5 @@
 <?php
-function rcd_tracts_bilingual_booklet_select_form($atts) {
+function rcd_tracts_monolingual_booklet_select_form($atts) {
     $atts = shortcode_atts(array(
         'tract_type' => 'bilingual-booklet',
     ), $atts);
@@ -24,4 +24,4 @@ function rcd_tracts_bilingual_booklet_select_form($atts) {
     <?php
     return ob_get_clean();
 }
-add_shortcode('rcd_tracts_select_bilingual_booklet', 'rcd_tracts_bilingual_booklet_select_form');
+add_shortcode('rcd_tracts_select_monolingual_booklet', 'rcd_tracts_monolingual_booklet_select_form');
