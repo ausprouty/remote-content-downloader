@@ -1,9 +1,9 @@
 <?php
 
-add_shortcode('rcd_tract_select_monolingual_booklet', 'rcd_tract_monolingual_booklet_select_form');
+add_shortcode('rcd_tract_foreign_select_bilingual_booklet', 'rcd_tract_foreign_bilingual_booklet_select_form');
 
 
-function rcd_tract_monolingual_booklet_select_form() {
+function rcd_tract_foreign_bilingual_booklet_select_form() {
 
     ob_start();
     ?>
@@ -17,8 +17,8 @@ function rcd_tract_monolingual_booklet_select_form() {
             </select>
         </div>
         
-        <!--  Get the paper-size options-->
-        <div id="paper-size-container" style="visibility:hidden;">
+            <!--  Get the format options-->
+            <div id="paper-size-container" style="visibility:hidden;">
             <label for="paper-size">Paper size</label>
             <select id="paper-size" name="paper-size" style="display:none;">
             </select>

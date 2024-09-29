@@ -1,9 +1,9 @@
 <?php
 
-add_shortcode('rcd_tract_select_monolingual_booklet', 'rcd_tract_monolingual_booklet_select_form');
+add_shortcode('rcd_tract_select_monolingual_page', 'rcd_tract_monolingual_page_select_form');
 
 
-function rcd_tract_monolingual_booklet_select_form() {
+function rcd_tract_monolingual_booklet_page_form() {
 
     ob_start();
     ?>

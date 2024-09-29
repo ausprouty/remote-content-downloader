@@ -1,9 +1,8 @@
 <?php
 
-add_shortcode('rcd_tract_select_monolingual_booklet', 'rcd_tract_monolingual_booklet_select_form');
+add_shortcode('rcd_tract_select_bilingual_booklet', 'rcd_tract_bilingual_booklet_select_form');
 
-
-function rcd_tract_monolingual_booklet_select_form() {
+function rcd_tract_bilingual_booklet_select_form() {
 
     ob_start();
     ?>
@@ -16,7 +15,13 @@ function rcd_tract_monolingual_booklet_select_form() {
                 <!-- Add options dynamically based on API call if needed -->
             </select>
         </div>
-        
+        <!--  Get the second language options-->
+        <div id="lang2-container" style="visibility:hidden;">
+            <label for="lang2">I also want the tract to have text in:</label>
+            <select id="lang2" name="lang2" style="display:none;">
+            </select>
+        </div>
+            
         <!--  Get the paper-size options-->
         <div id="paper-size-container" style="visibility:hidden;">
             <label for="paper-size">Paper size</label>

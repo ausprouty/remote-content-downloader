@@ -1,29 +1,78 @@
-// Function to populate language select options
-function populatecontactSelect(apiEndpoint, formId) {
-    const form = document.getElementById(formId);
-    const contactSelect = form.querySelector('#contact');  // Use querySelector within the form
-
-    // Fetch data to populate contact on page load
-    const contactUrl = `${apiEndpoint}/tract/distinct/contact`;
-
-    fetch(contactUrl)
-    .then(response => response.json())
-    .then(data => {
-        data.forEach(item => {
-            const option = new Option(item.contact, item.contact);  // Create new option
-            contactSelect.appendChild(option);  // Append it to the select
-        });
-    })
-    .catch(error => console.error('Error fetching contact data:', error));
-}
-
-// Example usage: for bilingual-page and bilingual-booklet
 document.addEventListener('DOMContentLoaded', function () {
     const apiEndpoint = RCDSettings.apiEndpoint;
 
-    // Populate for bilingual-page
-    populatecontactSelect(apiEndpoint, 'rcd-tract-form-bilingual-page');
+    // Get the form element
+    const form = document.getElementById('rcd-tract-form');
+    if (form) {
+        const formType = form.getAttribute('data-form-type');
+        const lang1Select = form.querySelector('#lang1');
+        const lang2Container = form.querySelector('#lang2-container');
+        const lang2Select = form.querySelector('#lang2');
+        const papersizeSelect = form.querySelector('#papersize');
+        const contactSelect = form.querySelector('#contact');
 
-    // Populate for bilingual-booklet
-    populatecontactSelect(apiEndpoint, 'rcd-tract-form-bilingual-booklet');
+        let selectedLang1 = '';
+        let selectedLang2 = '';
+        let selectedPapersize = '';
+
+        // Function to populate papersize options
+        function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2 = null) {
+            let papersizeUrl = lang2
+                ? `${apiEndpoint}/tracts/${formType}/papersize/${lang1}/${lang2}`
+                : `${apiEndpoint}/tracts/${formType}/papersize/${lang1}`;
+
+            papersizeSelect.innerHTML = '';  // Clear any existing options
+
+            fetch(papersizeUrl)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    const option = new Option(item.papersize, item.papersize);
+                    papersizeSelect.appendChild(option);
+                });
+                // Add event listener for when papersize is selected
+                papersizeSelect.addEventListener('change', function () {
+                    selectedPapersize = papersizeSelect.value;
+                    // Once papersize is selected, populate contacts
+                    if (selectedPapersize) {
+                        populatecontactSelect(apiEndpoint, form.id);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching papersize data:', error));
+        }
+
+        // Handle lang1 selection
+        lang1Select.addEventListener('change', function () {
+            selectedLang1 = lang1Select.value;
+
+            // Bilingual case: Check if lang2Container exists, and handle accordingly
+            if (lang2Container && selectedLang1) {
+                lang2Container.style.visibility = 'visible';
+                const lang2Url = `${apiEndpoint}/tracts/${formType}/lang2?lang1=${selectedLang1}`;
+
+                fetch(lang2Url)
+                    .then(response => response.json())
+                    .then(data => {
+                        lang2Select.innerHTML = '';  // Clear previous options
+                        data.forEach(item => {
+                            const option = new Option(item.lang2, item.lang2);
+                            lang2Select.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching lang2 data:', error));
+
+                // Handle lang2 selection to trigger papersize population
+                lang2Select.addEventListener('change', function () {
+                    selectedLang2 = lang2Select.value;
+                    if (selectedLang1 && selectedLang2) {
+                        populatePapersizeSelect(apiEndpoint, formType, selectedLang1, selectedLang2);
+                    }
+                });
+            } else {
+                // Single-language case: No lang2, so populate papersize directly
+                populatePapersizeSelect(apiEndpoint, formType, selectedLang1);
+            }
+        });
+    }
 });

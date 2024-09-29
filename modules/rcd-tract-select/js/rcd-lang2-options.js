@@ -1,29 +1,40 @@
-// Function to populate language select options
-function populatelang2Select(apiEndpoint, formId) {
-    const form = document.getElementById(formId);
-    const lang2Select = form.querySelector('#lang2');  // Use querySelector within the form
-
-    // Fetch data to populate lang2 on page load
-    const lang2Url = `${apiEndpoint}/tract/distinct/lang2`;
-
-    fetch(lang2Url)
-    .then(response => response.json())
-    .then(data => {
-        data.forEach(item => {
-            const option = new Option(item.lang2, item.lang2);  // Create new option
-            lang2Select.appendChild(option);  // Append it to the select
-        });
-    })
-    .catch(error => console.error('Error fetching lang2 data:', error));
-}
-
-// Example usage: for bilingual-page and bilingual-booklet
 document.addEventListener('DOMContentLoaded', function () {
     const apiEndpoint = RCDSettings.apiEndpoint;
 
-    // Populate for bilingual-page
-    populatelang2Select(apiEndpoint, 'rcd-tract-form-bilingual-page');
+    // Get the form element
+    const form = document.getElementById('rcd-tract-form');
+    if (form) {
+        const formType = form.getAttribute('data-form-type');  // Get form type from data attribute
+        const lang1Select = form.querySelector('#lang1');
+        const lang2Container = form.querySelector('#lang2-container');
+        const lang2Select = form.querySelector('#lang2');
 
-    // Populate for bilingual-booklet
-    populatelang2Select(apiEndpoint, 'rcd-tract-form-bilingual-booklet');
+        // Add event listener for lang1 selection to populate lang2
+        lang1Select.addEventListener('change', function () {
+            const selectedLang1 = lang1Select.value;
+
+            // Only proceed if lang2-container exists and lang1 has a selected value
+            if (lang2Container && selectedLang1) {
+                // Clear any existing options in lang2
+                lang2Select.innerHTML = '';
+
+                // Show lang2 container and fetch new lang2 options based on selected lang1
+                lang2Container.style.visibility = 'visible';
+
+                const lang2Url = `${apiEndpoint}/tracts/${formType}/lang2/${selectedLang1}`
+                fetch(lang2Url)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(item => {
+                            const option = new Option(item.lang2, item.lang2);
+                            lang2Select.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching lang2 data:', error));
+            } else {
+                // Hide the lang2 container if no lang1 is selected
+                lang2Container.style.visibility = 'hidden';
+            }
+        });
+    }
 });
