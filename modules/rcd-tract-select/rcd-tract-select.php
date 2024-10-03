@@ -10,7 +10,10 @@ Author: Your Name
 define('RCD_TRACT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RCD_TRACT_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-/function rcd_tract_enqueue_global_scripts() {
+// Include the form file
+include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-render-tract-form.php';
+
+function rcd_tract_enqueue_global_scripts() {
     // Enqueue CSS
     wp_enqueue_style('rcd-tract-style', RCD_TRACT_PLUGIN_URL . 'css/style.css');
 

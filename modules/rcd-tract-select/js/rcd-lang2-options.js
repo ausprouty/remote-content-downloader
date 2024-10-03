@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Show lang2 container and fetch new lang2 options based on selected lang1
                 lang2Container.style.visibility = 'visible';
 
-                const lang2Url = `${apiEndpoint}/tracts/${formType}/lang2/${selectedLang1}`
+                const lang2Url = `${apiEndpoint}/tracts/options/lang2/${formType}/${selectedLang1}`
                 fetch(lang2Url)
                     .then(response => response.json())
                     .then(data => {

@@ -9,19 +9,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const lang2Container = form.querySelector('#lang2-container');
         const lang2Select = form.querySelector('#lang2');
         const papersizeSelect = form.querySelector('#papersize');
-        const contactSelect = form.querySelector('#contact');
 
         let selectedLang1 = '';
         let selectedLang2 = '';
-        let selectedPapersize = '';
 
         // Function to populate papersize options
         function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2 = null) {
+            // Construct the URL based on whether lang2 is needed
             let papersizeUrl = lang2
                 ? `${apiEndpoint}/tracts/${formType}/papersize/${lang1}/${lang2}`
-                : `${apiEndpoint}/tracts/${formType}/papersize/${lang1}`;
+                : `${apiEndpoint}/tracts/${formType}/papersize/${lang1}/${lang1}`;
 
-            papersizeSelect.innerHTML = '';  // Clear any existing options
+            // Clear any existing options
+            papersizeSelect.innerHTML = '';
 
             fetch(papersizeUrl)
             .then(response => response.json())
@@ -29,14 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.forEach(item => {
                     const option = new Option(item.papersize, item.papersize);
                     papersizeSelect.appendChild(option);
-                });
-                // Add event listener for when papersize is selected
-                papersizeSelect.addEventListener('change', function () {
-                    selectedPapersize = papersizeSelect.value;
-                    // Once papersize is selected, populate contacts
-                    if (selectedPapersize) {
-                        populatecontactSelect(apiEndpoint, form.id);
-                    }
                 });
             })
             .catch(error => console.error('Error fetching papersize data:', error));
@@ -49,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Bilingual case: Check if lang2Container exists, and handle accordingly
             if (lang2Container && selectedLang1) {
                 lang2Container.style.visibility = 'visible';
-                const lang2Url = `${apiEndpoint}/tracts/${formType}/lang2?lang1=${selectedLang1}`;
+                const lang2Url = `${apiEndpoint}/tracts/options/papersize/${formType}/${selectedLang1}/${selectedLang2}`;
 
                 fetch(lang2Url)
                     .then(response => response.json())
@@ -61,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     })
                     .catch(error => console.error('Error fetching lang2 data:', error));
-
+                
                 // Handle lang2 selection to trigger papersize population
                 lang2Select.addEventListener('change', function () {
                     selectedLang2 = lang2Select.value;

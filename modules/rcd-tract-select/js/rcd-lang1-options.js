@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const lang1Select = form.querySelector('#lang1');
         
         // Create the URL with formType embedded
-        const lang1Url = `${apiEndpoint}/tracts/${formType}/lang1`;
+        const lang1Url = `${apiEndpoint}/tracts/options//lang1/${formType}`;
 
         // Fetch data for the language selection
         fetch(lang1Url)
