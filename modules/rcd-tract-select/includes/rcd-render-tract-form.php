@@ -20,7 +20,7 @@ function rcd_render_tract_form($tract_type) {
             <!--  Get the second language options-->
             <div id="lang2-container" style="visibility:hidden;">
                 <label for="lang2">I also want the tract to have text in:</label>
-                <select id="lang2" name="lang2" style="display:none;">
+                <select id="lang2" name="lang2" >
                 </select>
             </div>
         <?php endif; ?>
@@ -28,22 +28,22 @@ function rcd_render_tract_form($tract_type) {
         <!--  Get the audience options-->
         <div id="audience-container" style="visibility:hidden;">
             <label for="audience">Audience </label>
-            <select id="audience" name="audience" style="display:none;">
+            <select id="audience" name="audience" >
             </select>
         </div>
             
         <!--  Get the paper-size options-->
         <div id="papersize-container" style="visibility:hidden;">
             <label for="papersize">Paper size</label>
-            <select id="papersize" name="papersize" style="display:none;">
+            <select id="papersize" name="papersize" >
             </select>
         </div>
         <!--  Get contact options-->
-        <div id="contacts-container" style="visibility:hidden;">
-            <label for="contacts">
+        <div id="contact-container" style="visibility:hidden;">
+            <label for="contact">
                 For further information, they should contact ministries in:
             </label>
-            <select id="contacts" name="contacts" style="display:none;">
+            <select id="contact" name="contact" >
             </select>
         </div>
     </form>

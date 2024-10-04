@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const lang2Select = form.querySelector('#lang2');
         const audienceContainer = form.querySelector('#audience-container');
         const audienceSelect = form.querySelector('#audience');
+        const papersizeContainer = form.querySelector('#papersize-container');
         const papersizeSelect = form.querySelector('#papersize');
-        const contactSelect = form.querySelector('#contacts');
+        const contactContainer = form.querySelector('#contact-container');
+        const contactSelect = form.querySelector('#contact');
 
         let selectedLang1 = '';
         let selectedLang2 = '';
@@ -24,11 +26,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // Function to populate lang1 options on page load
         function populateLang1Select(apiEndpoint, formType) {
             let lang1Url = `${apiEndpoint}/tracts/options/lang1/${formType}`;
+            console.log (lang1Url)
             lang1Select.innerHTML = ''; // Clear existing options
 
             fetch(lang1Url)
             .then(response => response.json())
             .then(data => {
+                addPlaceholder(lang1Select, 'Select a language...'); // Add the placeholder
                 data.forEach(item => {
                     const option = new Option(item.lang1, item.lang1);
                     lang1Select.appendChild(option);
@@ -45,17 +49,19 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log ('I am checking to see if selectedLang1 exists', selectedLang1);
             // Bilingual case: Check if lang2Container exists, and handle accordingly
             if (lang2Container && selectedLang1) {
-                lang2Container.style.visibility = 'visible';
+                
                 const lang2Url = `${apiEndpoint}/tracts/options/lang2/${formType}/${selectedLang1}`;
                 console.log ('I am checking to see if lang2Url exists', lang2Url);
                 fetch(lang2Url)
                     .then(response => response.json())
                     .then(data => {
                         lang2Select.innerHTML = '';  // Clear previous options
+                        addPlaceholder(lang2Select, 'Select a language...'); // Add the placeholder
                         data.forEach(item => {
                             const option = new Option(item.lang2, item.lang2);
                             lang2Select.appendChild(option);
                         });
+                        lang2Container.style.visibility = 'visible';
                     })
                     .catch(error => console.error('Error fetching lang2 data:', error));
 
@@ -78,32 +84,31 @@ document.addEventListener('DOMContentLoaded', function () {
             let audienceUrl = `${apiEndpoint}/tracts/options/audience/${formType}/${lang1}/${lang2}`;
 
             audienceSelect.innerHTML = '';  // Clear previous options
-
+            console.log ('I am checking to see if audience exists', audienceUrl);
             fetch(audienceUrl)
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
                     // If audience options are available, show the audience container
-                    audienceContainer.style.visibility = 'visible';
-                    audienceSelect.style.display = 'block';
-
+                    addPlaceholder(audienceSelect, 'Select an audience...'); // Add the placeholder
                     data.forEach(item => {
                         const option = new Option(item.audience, item.audience);
                         audienceSelect.appendChild(option);
                     });
+                    audienceContainer.style.visibility = 'visible';
 
                     // Handle audience selection to trigger papersize population
                     audienceSelect.addEventListener('change', function () {
                         selectedAudience = audienceSelect.value;
                         if (selectedAudience) {
                             resetSelections('audience');
-                            populatePapersizeSelect(apiEndpoint, formType, selectedLang1, selectedLang2);
+                            populatePapersizeSelect(apiEndpoint, formType, selectedLang1, selectedLang2, selectedAudience);
                         }
                     });
                 } else {
                     // If no audience is needed, skip to papersize selection
                     resetSelections('audience');
-                    populatePapersizeSelect(apiEndpoint, formType, lang1, lang2);
+                    populatePapersizeSelect(apiEndpoint, formType, lang1, lang2, null);
                 }
             })
             .catch(error => console.error('Error fetching audience data:', error));
@@ -111,27 +116,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         // Function to populate papersize options
-        function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2 = null) {
-            let papersizeUrl = lang2
-                ? `${apiEndpoint}/tracts/options/papersize/${formType}/${lang1}/${lang2}`
-                : `${apiEndpoint}/tracts/options/papersize/${formType}/${lang1}/${lang1}`;
+        function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2, audience) {
+            let papersizeUrl = `${apiEndpoint}/tracts/options/papersize/${formType}/${lang1}/${lang2}/${audience}`;
 
             papersizeSelect.innerHTML = '';  // Clear any existing options
-
+            console.log ('I am checking to see if papersize exists',papersizeUrl);
             fetch(papersizeUrl)
             .then(response => response.json())
             .then(data => {
+                console.log (data)
+                addPlaceholder(papersizeSelect, 'Select an audience...'); // Add the placeholder
                 data.forEach(item => {
-                    const option = new Option(item.papersize, item.papersize);
+                    const option = new Option(item.paper_size, item.paper_size);
                     papersizeSelect.appendChild(option);
                 });
+                console.log (papersizeSelect)
+                papersizeContainer.style.visibility = 'visible';
 
                 // Handle papersize selection
                 papersizeSelect.addEventListener('change', function () {
                     selectedPapersize = papersizeSelect.value;
                     if (selectedPapersize) {
                         resetSelections('papersize');
-                        populateContactSelect(apiEndpoint, formType, selectedLang1, selectedLang2, selectedPapersize);
+                        populateContactSelect(apiEndpoint, formType, selectedLang1, selectedLang2, selectedAudience, selectedPapersize);
                     }
                 });
             })
@@ -142,22 +149,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
         
         // Function to populate contact options
-        function populateContactSelect(apiEndpoint, formType, lang1, lang2, papersize) {
-            let contactUrl = `${apiEndpoint}/tracts/options/contacts/${formType}/${lang1}/${lang2 ? lang2 : lang1}/${papersize}`;
+        function populateContactSelect(apiEndpoint, formType, lang1, lang2, audience, papersize) {
+            let contactUrl = `${apiEndpoint}/tracts/options/contacts/${formType}/${lang1}/${lang2}/${audience}/${papersize}`;
 
             contactSelect.innerHTML = '';  // Clear any existing options
-
+            console.log ('I am checking to see if contact exists', contactUrl);
             fetch(contactUrl)
+            
             .then(response => response.json())
             .then(data => {
+                addPlaceholder(contactSelect, 'I want them to be able to contact ministries in...'); // Add the placeholder
                 data.forEach(item => {
                     const option = new Option(item.contact, item.contact);
                     contactSelect.appendChild(option);
+                });
+                contactContainer.style.visibility = 'visible';
+                // Handle papersize selection
+                contactSelect.addEventListener('change', function () {
+                    selectedContact = contactSelect.value;
+                    if (selectedContact) {
+                        alert('You made it to the end!'); // Do something with the final selection
+                    }
                 });
             })
             .catch(error => console.error('Error fetching contact data:', error));
         }
 
+        function addPlaceholder(selectElement, placeholderText) {
+            const placeholder = new Option(placeholderText, '');
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            selectElement.appendChild(placeholder);
+        }
+        
         
         // Reset all options below a selection
         function resetSelections(from) {
@@ -168,26 +192,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 contactSelect.innerHTML = '';
                 lang2Container.style.visibility = 'hidden';
                 audienceContainer.style.visibility = 'hidden';
-                papersizeSelect.style.display = 'none';
-                contactSelect.style.display = 'none';
+                papersizeContainer.style.visibility = 'hidden';
+                contactContainer.style.visibility = 'hidden';
+            
             }
             if (from === 'lang2') {
                 audienceSelect.innerHTML = '';
                 papersizeSelect.innerHTML = '';
                 contactSelect.innerHTML = '';
                 audienceContainer.style.visibility = 'hidden';
-                papersizeSelect.style.display = 'none';
-                contactSelect.style.display = 'none';
+                papersizeContainer.style.visibility = 'hidden';
+                contactContainer.style.visibility = 'hidden';
             }
             if (from === 'audience') {
                 papersizeSelect.innerHTML = '';
                 contactSelect.innerHTML = '';
-                papersizeSelect.style.display = 'none';
-                contactSelect.style.display = 'none';
+                papersizeContainer.style.visibility = 'hidden';
+                contactContainer.style.visibility = 'hidden';
             }
             if (from === 'papersize') {
                 contactSelect.innerHTML = '';
-                contactSelect.style.display = 'none';
+                contactContainer.style.visibility = 'hidden';
             }
         }
 
