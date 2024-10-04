@@ -44,9 +44,8 @@ function rcd_include_modules() {
     foreach ($modules as $module_dir) {
         $module_name = basename($module_dir);
         $module_file = $modules_dir . $module_name . '/' . $module_name . '.php';
-        writeLogAppend('rcd_include_modules-47', $module_file); // Log the module file for debugging
+       
         if (file_exists($module_file)) {
-            writeLogAppend('rcd_include_modules-49', $module_file); // Log the module file for debugging
             include_once $module_file;
         }
     }

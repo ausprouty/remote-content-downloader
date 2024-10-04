@@ -2,6 +2,7 @@
 
 
 function rcd_render_tract_form($tract_type) {
+    writeLog("rcd_render_tract_form-1", 'rcd_render_tract_form');
 
     ob_start();
     ?>
@@ -15,7 +16,7 @@ function rcd_render_tract_form($tract_type) {
                 <!-- Add options dynamically based on API call if needed -->
             </select>
         </div>
-        <?php if ($tract_type === 'bilingual-page' || $tract_type === 'bilingual-tract') : ?>
+        <?php if ($tract_type === 'bilingual-page' || $tract_type === 'bilingual-book') : ?>
             <!--  Get the second language options-->
             <div id="lang2-container" style="visibility:hidden;">
                 <label for="lang2">I also want the tract to have text in:</label>
@@ -26,16 +27,15 @@ function rcd_render_tract_form($tract_type) {
 
         <!--  Get the audience options-->
         <div id="audience-container" style="visibility:hidden;">
-            <label for="audience">Audience
-            </label>
+            <label for="audience">Audience </label>
             <select id="audience" name="audience" style="display:none;">
             </select>
         </div>
             
         <!--  Get the paper-size options-->
-        <div id="paper-size-container" style="visibility:hidden;">
-            <label for="paper-size">Paper size</label>
-            <select id="paper-size" name="paper-size" style="display:none;">
+        <div id="papersize-container" style="visibility:hidden;">
+            <label for="papersize">Paper size</label>
+            <select id="papersize" name="papersize" style="display:none;">
             </select>
         </div>
         <!--  Get contact options-->
