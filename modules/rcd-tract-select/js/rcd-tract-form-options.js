@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 console.log (data)
-                addPlaceholder(papersizeSelect, 'Select an audience...'); // Add the placeholder
+                addPlaceholder(papersizeSelect, 'Select paper size...'); // Add the placeholder
                 data.forEach(item => {
                     const option = new Option(item.paper_size, item.paper_size);
                     papersizeSelect.appendChild(option);
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             .then(response => response.json())
             .then(data => {
-                addPlaceholder(contactSelect, 'I want them to be able to contact ministries in...'); // Add the placeholder
+                addPlaceholder(contactSelect, 'Select Country..'); // Add the placeholder
                 data.forEach(item => {
                     const option = new Option(item.contact, item.contact);
                     contactSelect.appendChild(option);

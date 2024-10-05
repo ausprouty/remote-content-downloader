@@ -40,3 +40,14 @@
 #download-form button:hover {
     background-color: #005177;
 }
+
+label {
+    margin-top:15px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px; /* Optional: Adds space between the label and the select */
+}
+
+select {
+    display: block; /* Ensures it is below the label */
+}
