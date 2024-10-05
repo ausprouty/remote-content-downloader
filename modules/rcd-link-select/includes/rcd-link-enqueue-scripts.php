@@ -14,12 +14,6 @@ function enqueue_rcd_scripts_and_styles() {
     // Enqueue custom JavaScript file for link select functionality
     wp_enqueue_script('rcd-link-select', plugin_dir_url(__FILE__) . '../js/rcd-link-select.js', array('jquery', 'jquery-ui-dialog'), null, true);
 
-    // Enqueue add state to form functionality
-    wp_enqueue_script('add-state-to-form', plugin_dir_url(__FILE__) . '../js/add-state-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);
-
-    // Enqueue add mail list to form functionality
-    wp_enqueue_script('add-mail-lists-to-form', plugin_dir_url(__FILE__) . '../js/add-mail-lists-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);
-
     // Enqueue custom CSS file for the form
     wp_enqueue_style('rcd-link-select-css', plugin_dir_url(__FILE__) . '../css/rcd-link-select.css', array(), null, 'all');
 

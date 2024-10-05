@@ -12,10 +12,10 @@ define('RCD_LINK_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RCD_LINK_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 // Include the form rendering file
-include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-render-link-form.php';
+include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-form.php';
 
 // Include the script/style enqueuing file
-include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-enqueue-link-scripts.php';
+include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-enqueue-scripts.php';
 
 // Unified shortcode function
 function rcd_link_select_form($atts) {

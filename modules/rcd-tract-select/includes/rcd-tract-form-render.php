@@ -46,6 +46,12 @@ function rcd_render_tract_form($tract_type) {
             <select id="contact" name="contact" >
             </select>
         </div>
+        <!--  Select Object-->
+        <div id="approval-container" style="visibility:hidden;">
+            <button>Tract Found.  Press to continue..</button>
+           
+        </div>
+        
     </form>
     <div id="rcd-tract-results"></div>
     <?php

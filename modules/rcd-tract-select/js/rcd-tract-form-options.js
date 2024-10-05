@@ -45,8 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
         lang1Select.addEventListener('change', function () {
             selectedLang1 = lang1Select.value;
             resetSelections('lang1');
-            console.log ('I am checking to see if lang2Container exists', lang2Container);
-            console.log ('I am checking to see if selectedLang1 exists', selectedLang1);
             // Bilingual case: Check if lang2Container exists, and handle accordingly
             if (lang2Container && selectedLang1) {
                 
@@ -144,10 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => console.error('Error fetching papersize data:', error));
         }
-
-       
-
-        
         // Function to populate contact options
         function populateContactSelect(apiEndpoint, formType, lang1, lang2, audience, papersize) {
             let contactUrl = `${apiEndpoint}/tracts/options/contacts/${formType}/${lang1}/${lang2}/${audience}/${papersize}`;
@@ -168,7 +162,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 contactSelect.addEventListener('change', function () {
                     selectedContact = contactSelect.value;
                     if (selectedContact) {
-                        alert('You made it to the end!'); // Do something with the final selection
+                        let materialUrl = `${apiEndpoint}/tracts/options/filename/${formType}/${lang1}/${lang2}/${audience}/${papersize}/${selectedContact}`;
+                        fetch(materialUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                console.log(data);
+                                approvalContainer.style.visibility = 'visible';   
+                        })
+                        .catch(error => console.error('Error fetching tract info:', error));
                     }
                 });
             })
