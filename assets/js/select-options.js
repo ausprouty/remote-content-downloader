@@ -121,7 +121,7 @@ var country_options = [
  */
 const tractFormatOptions = {
     'PAGE': 'Print 6 page tract',       // A tract format that allows users to print a 6-page tract.
-    'BOOKLET': 'Make my own booklets',  // A format for users who want to create their own booklets.
+    'BOOK': 'Make my own books',  // A format for users who want to create their own booklets.
     'TABLET': 'Show on a tablet',       // A format optimized for showing the tract on a tablet.
     'PHONE': 'Download pdf for mobile phone',  // A mobile-friendly PDF download format for phones.
     'VIEW': 'View on mobile phone',     // A format that allows users to view the tract directly on a mobile phone.
