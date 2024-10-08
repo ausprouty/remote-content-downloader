@@ -10,21 +10,20 @@ Author: Your Name
 define('RCD_TRACT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RCD_TRACT_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-// Include the form file
-include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-tract-form-render.php';
-
-// Include the form rendering file
-include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-form.php';
-
-// Include the script/style enqueuing file
-include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-tract-enqueue-scripts.php';
-
-// Enqueue local scripts and styles
-
-add_action('wp_enqueue_scripts', 'rcd_tract_enqueue_scripts');
+add_shortcode('rcd_tract_select', 'rcd_tract_select_form');
 
 // Unified shortcode function
 function rcd_tract_select_form($atts) {
+
+    // Include the form rendering file
+    include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-tract-form-renderer.php';
+  
+    // Include the script/style enqueuing file
+    include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-tract-enqueue-scripts.php';
+
+    // Enqueue local scripts and styles
+    add_action('wp_enqueue_scripts', 'rcd_tract_enqueue_scripts');
+
     // Set default attributes and merge with incoming attributes
     $atts = shortcode_atts(array(
         'type' => 'bilingual-book' // default tract type
@@ -33,4 +32,5 @@ function rcd_tract_select_form($atts) {
     // Pass the tract type to the common form renderer
     return rcd_render_tract_form($atts['type']);
 }
-add_shortcode('rcd_tract_select', 'rcd_tract_select_form');
+
+
