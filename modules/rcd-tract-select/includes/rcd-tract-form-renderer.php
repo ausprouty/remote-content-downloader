@@ -2,10 +2,10 @@
 
 
 function rcd_render_tract_form($tract_type) {
-    writeLog("rcd_render_tract_form-1", 'rcd_render_tract_form');
-
     ob_start();
     ?>
+
+
     <form id="rcd-tract-form" data-form-type="<?php echo esc_attr($tract_type); ?>">
 
         <div>

@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param {string} apiEndpoint - The base API URL.
          * @param {string} formType - The type of form.
          * @param {string} lang1 - The selected lang1.
-         * @param {string} [lang2] - The selected lang2 (optional for bilingual forms).
+         * @param {string} [lang2] - The selected lang2. (use lang1 for monolingual forms)
          */
         function populateAudienceSelect(apiEndpoint, formType, lang1, lang2 = '') {
             const audienceUrl = `${apiEndpoint}/tracts/options/audience/${formType}/${lang1}/${lang2}`;
@@ -130,8 +130,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param {string} apiEndpoint - The base API URL.
          * @param {string} formType - The type of form.
          * @param {string} lang1 - The selected lang1.
-         * @param {string} [lang2] - The selected lang2 (optional).
-         * @param {string} [audience] - The selected audience (optional).
+         * @param {string} [lang2] - The selected lang2 . (use lang1 for monolingual forms)
+         * @param {string} [audience] - The selected audience.
          */
         function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2, audience) {
             const papersizeUrl = `${apiEndpoint}/tracts/options/papersize/${formType}/${lang1}/${lang2}/${audience}`;

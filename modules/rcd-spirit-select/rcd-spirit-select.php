@@ -15,7 +15,7 @@ function rcd_spirit_select_shortcode() {
     rcd_spirit_enqueue_assets();
     // Establish the API endpoint for fetching the available languages
     $api_url = API_ENDPOINT . '/spirit/titles';
-    writeLogDebug('rcd_spirit_select_shortcode', $api_url); // Log the API URL for debugging
+    
 
     // Fetch the API data using `wp_remote_get`
     $response = wp_remote_get($api_url);
