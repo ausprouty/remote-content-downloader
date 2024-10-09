@@ -48,7 +48,8 @@ function rcd_render_tract_form($tract_type) {
         </div>
         <!--  Select Object-->
         <div id="approval-container" style="visibility:hidden;">
-            <button>Tract Found.  Press to continue..</button>
+           <h2>Great! I found the tract you need</h2>
+           <p>Now just a few more questions so I know how to best help you.</p>
            
         </div>
         

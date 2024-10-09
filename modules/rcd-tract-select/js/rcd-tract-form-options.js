@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const papersizeSelect = form.querySelector('#papersize');
         const contactContainer = form.querySelector('#contact-container');
         const contactSelect = form.querySelector('#contact');
+        const approvalContainer = form.querySelector('#approval-container');
 
         // Variables to store selected options
         let selectedLang1 = '';

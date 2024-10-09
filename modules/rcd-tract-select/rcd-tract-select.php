@@ -17,11 +17,11 @@ add_action('wp_enqueue_scripts', 'rcd_tract_check_enqueue_scripts');
 
 // Unified shortcode function
 function rcd_tract_select_form($atts) {
-    writeLog("rcd_tract_select_form-17", 'rcd_tract_select_form');
+    
     // Include the form rendering file
     include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-tract-form-renderer.php';
   
-    writeLog("rcd_tract_select_form-27", 'rcd_tract_select_form');
+    
     // Set default attributes and merge with incoming attributes
     $atts = shortcode_atts(array(
         'type' => 'bilingual-book' // default tract type
