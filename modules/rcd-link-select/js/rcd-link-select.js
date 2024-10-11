@@ -37,15 +37,18 @@ jQuery(document).ready(function($) {
                 wpnonce: nonce
             },
             success: function(response) {
-                if (response.success) {
-                    // If user is verified, display additional fields
+                console.log(response);
+                if (response.cid == null) {
+                    // If user is not verified, display additional fields
                     $('#conditional-fields').show();
                     if (response.showState) {
                         $('#state-container').css('visibility', 'visible');
                     }
                 } else {
-                    $('#error').text(response.message).show(); // Display any errors
+                    // If user is already verified, hide additional fields
                     $('#conditional-fields').hide();
+                    $('#state-container').css('visibility', 'hidden');
+                    sessionStorage.setItem('cid', response.cid);
                 }
             },
             error: function(xhr, status, error) {

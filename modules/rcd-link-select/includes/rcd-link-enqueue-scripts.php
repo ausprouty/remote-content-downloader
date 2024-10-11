@@ -20,7 +20,7 @@ function enqueue_rcd_scripts_and_styles() {
             wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
         }
 
-        // Enqueue the external script
+        // Enqueue the external script for popup functionality
         wp_enqueue_script('popup-js', RCD_LINK_PLUGIN_URL . 'js/rcd-link-popup.js', array('jquery'), null, true);
     
         // Localize script to pass dynamic data (file URL)

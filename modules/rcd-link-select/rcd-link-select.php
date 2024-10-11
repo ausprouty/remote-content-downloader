@@ -16,6 +16,11 @@ include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-form.php';
 // Include the script/style enqueuing file
 include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-enqueue-scripts.php';
 
+
+// Include the country and state options for select
+include_once RCD_PLUGIN_DIR . 'includes/select-options.php';
+
+
 /**
  * Shortcode handler for rendering the download link with popup form
  *
