@@ -1,109 +1,105 @@
 jQuery(document).ready(function($) {
-    /**
-     * Opens the resource download form in a dialog when a download link is clicked.
-     * 
-     * The form is displayed in a modal dialog with a width of 400px. This is triggered by 
-     * clicking on an element with the class `.resource-download-link`.
-     *
-     * @param {Event} e The click event for the download link.
-     * @return void
-     */
+    // Open the download form in a modal dialog when the link is clicked
     $('.resource-download-link').on('click', function(e) {
         e.preventDefault(); // Prevent the default link behavior
         
         // Open the download form in a modal dialog
         $('#resource-download-form').dialog({
-            modal: true, // Modal behavior to prevent interaction outside the dialog
+            modal: true, // Modal behavior
             title: 'Download Resource',
-            width: 400 // Set dialog width to 400px
+            width: 400 // Dialog width
         });
     });
 
-    /**
-     * Handles the download form submission when the download button is clicked.
-     * 
-     * This function validates the email field, ensures the API settings (`RCDSettings`) are defined, 
-     * and sends an AJAX request to the server to process the resource download. 
-     * If successful, the user is redirected to the file URL for downloading the resource.
-     *
-     * @return void
-     */
-    $('#download-resource-button').on('click', function() {
-        // Get the value of the email field
-        var email = $('#email').val();
-        
-        // Validate the email field
-        if (!validateEmail(email)) {
-            alert('Please enter a valid email address or leave it blank.');
+    // Send AJAX to verify email as soon as it is entered
+    $('#email').on('blur', async function() {
+        var email = $(this).val();
+        if (email === '') return; // Do not send empty email to the server
+        // If the email field is not empty, validate the email format
+        if ( !validateEmail(email)) {
+            $('#error').text('Please enter a valid email address.').show();
             return;
         }
+        $('#error').hide();  
+        // Generate the nonce before making the AJAX request
+        const nonce = await generateWordpressNonce('verify_email');
+        // Verify the email via AJAX call
+        $.ajax({
+            url: RCDSettings.apiEndpoint + '/user/verify',  // Replace with your endpoint
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + RCDSettings.hlApiKey
+            },
+            data: {
+                action: 'verify_email',
+                email: email,
+                apiKey: RCDSettings.hlApiKey, 
+                wpnonce: nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    // If user is verified, display additional fields
+                    $('#conditional-fields').show();
+                    if (response.showState) {
+                        $('#state-container').css('visibility', 'visible');
+                    }
+                } else {
+                    $('#error').text(response.message).show(); // Display any errors
+                    $('#conditional-fields').hide();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error: ', status, error);
+                $('#error').text('An unexpected error occurred. Please try again later.').show();
+            }
+        });
+    });
 
-        // Ensure RCDSettings and the API endpoint are defined
-        if (typeof RCDSettings === 'undefined' || typeof RCDSettings.apiEndpoint === 'undefined') {
-            console.error('RCDSettings or apiEndpoint is not defined');
-            return;
-        }
+    // Handle form submission for resource download
+    $('#download-resource-button').on('click', function() {
+        
 
         const apiEndpoint = RCDSettings.apiEndpoint;
         const hlApiKey = RCDSettings.hlApiKey;
         
-        // Serialize the form data
+        // Serialize form data
         var formData = $('#download-form').serializeArray();
         
-        // Add the file data (assumed to be stored in a data attribute)
+        // Add file data
         var file = $('.resource-download-link').data('file');
         formData.push({ name: 'file', value: file });
         
-        // Add the API key to the form data
+        // Add API key
         formData.push({ name: 'apiKey', value: hlApiKey });
 
         const ajaxurl = apiEndpoint + '/materials/download';
-        console.log('ajaxurl', ajaxurl);
-        console.log(formData);
-        
-        // Send the form data to the server via AJAX
+
+        // Send form data to the server via AJAX
         $.ajax({
             url: ajaxurl,
             type: 'POST',
             data: {
                 action: 'process_resource_download',
-                formData: formData
+                formData: formData,
+                _wpnonce: RCDSettings.nonce // Validation nonce for security
             },
             success: function(response) {
-                console.log('response', response);
-                
-                // If the response is successful, redirect to the file URL
                 if (response.success) {
                     window.location.href = response.file_url;
                     $('#resource-download-form').dialog('close');
                 } else {
-                    // Show an error message if the request fails
-                    alert(response.message);
+                    $('#error').text(response.message).show();
                 }
             },
             error: function(xhr, status, error) {
                 console.error('AJAX Error: ', status, error);
-                alert('An unexpected error occurred. Please try again later.');
+                $('#error').text('An unexpected error occurred. Please try again later.').show();
             }
         });
     });
 
-    /**
-     * Validates the email address entered by the user.
-     * 
-     * This function uses a regular expression to validate that the email follows standard formatting. 
-     * It allows null or empty emails, as those may be optional in this context.
-     * 
-     * @param {string} email The email address entered by the user.
-     * @return {boolean} Returns true if the email is valid or empty, false otherwise.
-     */
+    // Validate email address
     function validateEmail(email) {
-        // Allow null or empty email
-        if (email === null || email.trim() === '') {
-            return true;
-        }
-        
-        // Regular expression to validate email format
         var re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return re.test(email);
     }

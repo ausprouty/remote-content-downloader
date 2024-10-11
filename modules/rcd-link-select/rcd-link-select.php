@@ -1,9 +1,8 @@
 <?php
-
 /*
 Plugin Name: RCD Link Select
-Description: A form to select and download resources.
-Version: 1.1
+Description: A plugin to display a popup form for downloading resources after collecting user information.
+Version: 1.0
 Author: Your Name
 */
 
@@ -17,16 +16,27 @@ include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-form.php';
 // Include the script/style enqueuing file
 include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-enqueue-scripts.php';
 
-// Unified shortcode function
-function rcd_link_select_form($atts) {
-    // Set default attributes and merge with incoming attributes
-    $atts = shortcode_atts(array(
-        'file' => '', // default file attribute
-        'name' => '', // default name attribute
+/**
+ * Shortcode handler for rendering the download link with popup form
+ *
+ * @param array $atts Attributes passed from the shortcode
+ * @return string HTML content to display the link and form
+ */
+function rcd_link_select_shortcode($atts) {
+    // Extract shortcode attributes
+    $attributes = shortcode_atts(array(
+        'file' => '',
+        'name' => '',
         'mail_lists' => array()
-    ), $atts, 'rcd_link_select');
+    ), $atts);
 
-    // Pass the attributes to the common form renderer
-    return rcd_render_link_form($atts);
+    
+    // Generate the download link that opens the popup
+    //$link = '<a href="javascript:void(0);" onclick="openPopup();">' . esc_html($attributes['name']) . '</a>';
+
+    // Render the form (from included file)
+    return rcd_render_link_form($attributes);
+
+    
 }
-add_shortcode('rcd_link_select', 'rcd_link_select_form');
+add_shortcode('rcd_link_select', 'rcd_link_select_shortcode');

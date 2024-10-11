@@ -17,6 +17,7 @@ function rcd_render_link_form($atts) {
     <div id="resource-download-form" style="display:none;">
         <form id="download-form">
             <!-- Always show email input field -->
+            <label for="prayer">Email Address</label>
             <input type="email" id="email" name="email" placeholder="Email" autocomplete="off">
 
             <!-- These fields will be conditionally displayed based on the userID check -->

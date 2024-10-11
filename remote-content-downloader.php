@@ -68,7 +68,8 @@ function rcd_localize_variables() {
     // Localize data (API endpoint and API key)
     $localize_data = array(
         'apiEndpoint' => defined('API_ENDPOINT') ? API_ENDPOINT : '',
-        'hlApiKey'    => defined('HL_API_KEY') ? HL_API_KEY : ''
+        'hlApiKey'    => defined('HL_API_KEY') ? HL_API_KEY : '',
+        'hlNonceSalt'=> defined('WORDPRESS_HL_NONCE_SALT') ? WORDPRESS_HL_NONCE_SALT : '',
     );
 
     // Localize the variables for front-end use
