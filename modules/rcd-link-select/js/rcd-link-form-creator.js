@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             var file = event.target.getAttribute('data-file');
             var mailLists = event.target.getAttribute('data-mail-lists').split(',');  // Split the comma-separated string
-            
+        
             // Create form dynamically
             var form = document.createElement('form');
             form.setAttribute('id', 'download-form');
@@ -93,25 +93,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
             form.appendChild(countrySelect);
             
-            // State select (hidden initially)
+            // State Select (Initially hidden)
             var stateLabel = document.createElement('label');
             stateLabel.setAttribute('for', 'state');
             stateLabel.innerText = 'State';
-            form.appendChild(stateLabel);
-
+            
             var stateContainer = document.createElement('div');
             stateContainer.setAttribute('id', 'state-container');
             stateContainer.style.display = 'none';  // Hide state by default
-            stateContainer.classList.add('rcd-hidden');  // Hidden class for state
-
+            stateContainer.classList.add('rcd-hidden');
+            
             var stateSelect = document.createElement('select');
             stateSelect.setAttribute('id', 'state');
             stateSelect.setAttribute('name', 'state');
-            stateSelect.classList.add('rcd-select');  // Select styling
-            stateContainer.appendChild(stateSelect);
-
-            form.appendChild(stateContainer);
+            stateSelect.classList.add('rcd-select');  // Apply select styles
+            stateContainer.appendChild(stateLabel);  // Append state label inside the container
+            stateContainer.appendChild(stateSelect);  // Append state dropdown
             
+            form.appendChild(stateContainer);  // Append state container to the form
+                
             // Mailing lists checkboxes (looping over mailLists array)
             mailLists.forEach(function(code) {
                 var checkboxGroup = document.createElement('div');
@@ -157,6 +157,36 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Insert the form directly after the clicked link
             event.target.insertAdjacentElement('afterend', form);
+
+            // Handle country selection and update state options dynamically
+            countrySelect.addEventListener('change', function() {
+                var country = countrySelect.value;
+                stateSelect.innerHTML = '';  // Clear existing options
+
+                if (country === 'Australia') {
+                    populateStateSelect(['NSW', 'QLD', 'SA', 'TAS', 'VIC', 'WA', 'ACT', 'NT']);
+                    stateContainer.style.display = 'block';  // Show state dropdown
+                } else if (country === 'United States') {
+                    populateStateSelect(usaStates);
+                    stateContainer.style.display = 'block';  // Show state dropdown
+                } else {
+                    stateContainer.style.display = 'none';  // Hide state dropdown for other countries
+                }
+            });
+
+            // Populate state dropdown
+            function populateStateSelect(states) {
+                var defaultOption = new Option('SELECT STATE:', '');
+                stateSelect.appendChild(defaultOption);
+
+                states.forEach(function(state) {
+                    var option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            }
+
         });
-    });
+    })
 });
