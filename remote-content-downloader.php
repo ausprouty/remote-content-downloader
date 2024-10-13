@@ -74,6 +74,11 @@ function rcd_localize_variables() {
 
     // Localize the variables for front-end use
     wp_localize_script('rcd-dummy-handle', 'RCDSettings', $localize_data);
+
+    
+    // Enqueue custom CSS file for the plugin
+    wp_enqueue_style('rcd-standard-css', RCD_PLUGIN_URL . 'assets/css/rcd-standard.css', array(), null, 'all');
+
     
     // Enqueue the dummy script (required to use wp_localize_script)
     wp_enqueue_script('rcd-dummy-handle');
