@@ -13,12 +13,15 @@ function rcd_render_link_form($atts) {
         return '<p>Invalid file or name attribute.</p>';
     }
 
-    // Output the download link with data attributes for the file and mail lists
     ob_start(); ?>
-    <a href="#" class="resource-download-link" data-file="<?= esc_attr($file) ?>" data-mail-lists="<?= esc_attr($mail_lists) ?>">
+    <a href="#" class="resource-download-link" 
+       data-file="<?= esc_attr($file) ?>" 
+       data-mail-lists="<?= esc_attr($mail_lists) ?>" 
+       data-name="<?= esc_attr($name) ?>">
         <?= esc_html($name) ?>
     </a>
-    <?php
+    <?php 
     return ob_get_clean();
+
 }
 add_shortcode('rcd-link-select', 'rcd_render_link_form');

@@ -10,13 +10,14 @@
  *
  * @type {Object}
  */
-const mailLists = {
+const allMailLists = {
     'followup': 'Tell me how to help new Christians grow',
     'tips': 'Send me tips on how to use this material',
     'start': 'Give me ideas for starting my first group',
     'multiply': 'I want to know how to get my groups to multiply',
     'weekly': 'Receive weekly emails',
     'abc': 'ABC\'s of Evangelism and Discipleship',
+    'holiday': 'I want to know how to plan holiday outreach events',
     'habits': 'Habits of effective evangelists'
 };
 

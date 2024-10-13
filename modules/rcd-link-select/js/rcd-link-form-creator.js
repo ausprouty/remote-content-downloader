@@ -11,14 +11,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             var file = event.target.getAttribute('data-file');
-            var mailLists = event.target.getAttribute('data-mail-lists').split(',');  // Split the comma-separated string
-        
+            var mailLists = event.target.getAttribute('data-mail-lists').split(',');  // Split the comma-separated string 
             // Create form dynamically
             var form = document.createElement('form');
             form.setAttribute('id', 'download-form');
             form.setAttribute('method', 'post');
             form.classList.add('rcd-form');  // Adding a custom class for styling
             
+            // Assuming name is passed from shortcode as a data-name attribute
+            var itemName = event.target.getAttribute('data-name');  // Get the item name
+
+            // Create the title for the form (name of the item)
+            var formTitle = document.createElement('h3');
+            formTitle.innerText = itemName;
+            formTitle.classList.add('rcd-form-title');  // Add a class for styling
+
+            // Append the title as the first element in the form
+            form.appendChild(formTitle);
+
+            // Create the static text element (e.g., a paragraph)
+            var staticText = document.createElement('p');
+            staticText.innerText = 'This is the static text that will appear after the title.';
+            staticText.classList.add('rcd-static-text');  // Add a class for styling
+
+            // Append the static text after the title
+            form.appendChild(staticText);
+
             // Close button (first element in the form, positioned in the top-right corner)
             var closeButton = document.createElement('button');
             closeButton.setAttribute('type', 'button');
@@ -112,26 +130,33 @@ document.addEventListener('DOMContentLoaded', function() {
             
             form.appendChild(stateContainer);  // Append state container to the form
                 
-            // Mailing lists checkboxes (looping over mailLists array)
+            // Mail list checkboxes
+            // Loop through the passed mailLists and create checkboxes with descriptions
             mailLists.forEach(function(code) {
-                var checkboxGroup = document.createElement('div');
-                checkboxGroup.classList.add('checkbox-group');
-                
-                var checkbox = document.createElement('input');
-                checkbox.setAttribute('type', 'checkbox');
-                checkbox.setAttribute('id', code);
-                checkbox.setAttribute('name', 'mail_lists[' + code + ']');
-                checkbox.setAttribute('value', code);
-                checkbox.classList.add('rcd-checkbox');  // Checkbox styling
-                checkboxGroup.appendChild(checkbox);
-                
-                var label = document.createElement('label');
-                label.setAttribute('for', code);
-                label.innerText = code;  // Use the code as the label, or adjust accordingly
-                label.classList.add('rcd-label');  // Label styling
-                checkboxGroup.appendChild(label);
-                
-                form.appendChild(checkboxGroup);
+        
+                // Check if the key exists in allMailLists object
+                if (allMailLists.hasOwnProperty(code.trim())) {
+                    var checkboxGroup = document.createElement('div');
+                    checkboxGroup.classList.add('checkbox-group');
+                    
+                    // Create checkbox
+                    var checkbox = document.createElement('input');
+                    checkbox.setAttribute('type', 'checkbox');
+                    checkbox.setAttribute('id', code);
+                    checkbox.setAttribute('name', 'mail_lists[' + code + ']');
+                    checkbox.setAttribute('value', code);
+                    checkbox.classList.add('rcd-checkbox');  // Checkbox styling
+                    checkboxGroup.appendChild(checkbox);
+                    
+                    // Create label for checkbox with the corresponding description
+                    var label = document.createElement('label');
+                    label.setAttribute('for', code);
+                    label.innerText = allMailLists[code.trim()];  // Use the description from the mailLists object
+                    label.classList.add('rcd-label');  // Label styling
+                    checkboxGroup.appendChild(label);
+                    
+                    form.appendChild(checkboxGroup);  // Append the checkbox group to the form
+                }
             });
             
             // Prayer request textarea

@@ -32,7 +32,6 @@ function enqueue_rcd_scripts_and_styles() {
         // Enqueue custom JavaScript file for state and country options
         wp_enqueue_script('select-options', RCD_PLUGIN_URL . 'assets/js/select-options.js', array(), null, true);
    
-
         // Enqueue custom JavaScript file for link select functionality
         wp_enqueue_script('rcd-link-select', RCD_LINK_PLUGIN_URL . 'js/rcd-link-select.js', array('jquery', 'jquery-ui-dialog'), null, true);
 
@@ -41,10 +40,10 @@ function enqueue_rcd_scripts_and_styles() {
         
         
          // Enqueue add state to form functionality
-        wp_enqueue_script('add-state-to-form', RCD_PLUGIN_URL . 'assets/js/add-state-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);
+        //wp_enqueue_script('add-state-to-form', RCD_PLUGIN_URL . 'assets/js/add-state-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);
         
         // Enqueue add mail list to form functionality
-        wp_enqueue_script('add-mail-lists-to-form', RCD_PLUGIN_URL . 'assets/js/add-mail-lists-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);     
+        //wp_enqueue_script('add-mail-lists-to-form', RCD_PLUGIN_URL . 'assets/js/add-mail-lists-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);     
         
         // Enqueue custom CSS file for the form
         wp_enqueue_style('rcd-link-select-css', plugin_dir_url(__FILE__) . '../css/rcd-link-select.css', array(), null, 'all');

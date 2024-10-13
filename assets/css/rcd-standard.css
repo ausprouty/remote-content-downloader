@@ -40,13 +40,17 @@
   /* Checkbox styling */
   .rcd-checkbox {
     margin-right: 8px;
+    transform: scale(1.5);  /* Increase the size of the checkbox */
   }
   
-  /* Labels for inputs and checkboxes */
-  .rcd-label {
-    font-size: 14px;
-    color: var(--color-text);
-  }
+ /* Labels for inputs and checkboxes */
+form .rcd-label {
+  font-size: 14pt !important;  /* Force the size */
+  color: var(--color-text);
+  font-family: inherit;  /* Ensure it inherits the correct font family if needed */
+  display: inline-block;  /* Ensure it behaves as a label */
+  margin-bottom: 5px;  /* Optional: adds some spacing below the label */
+}
   
   /* Main buttons */
   .rcd-button {
