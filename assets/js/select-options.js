@@ -10,7 +10,7 @@
  *
  * @type {Object}
  */
-var mail_list_options = {
+const mailLists = {
     'followup': 'Tell me how to help new Christians grow',
     'tips': 'Send me tips on how to use this material',
     'start': 'Give me ideas for starting my first group',
@@ -31,7 +31,7 @@ var mail_list_options = {
  *
  * @type {Array}
  */
-var us_state_options = [
+const us_state_options = [
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", 
     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 
     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", 
@@ -50,7 +50,7 @@ var us_state_options = [
  *
  * @type {Array}
  */
-var aus_state_options = [
+const aus_state_options = [
     "NSW", "QLD", "SA", "TAS", "VIC", "WA", "ACT", "NT"
 ];
 
@@ -67,7 +67,7 @@ var aus_state_options = [
  *
  * @type {Array}
  */
-var country_options = [
+const countryOptions = [
     "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", 
     "Antigua and Barbuda", "Argentina", "Armenia", "Australia", 
     "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", 
