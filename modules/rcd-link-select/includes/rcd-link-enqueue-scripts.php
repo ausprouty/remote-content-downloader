@@ -20,12 +20,7 @@ function enqueue_rcd_scripts_and_styles() {
             wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
         }
 
-        // old Enqueue the external script for popup functionality
-        wp_enqueue_script('popup-js', RCD_LINK_PLUGIN_URL . 'js/rcd-link-popup.js', array('jquery'), null, true);
         
-        // old Localize script to pass dynamic data (file URL)
-        wp_localize_script('popup-js', 'resourceFileUrl', esc_url($attributes['file']));
-
         // Enqueue the external script for popup functionality that will appear next to link
         wp_enqueue_script('form-creator-js', RCD_LINK_PLUGIN_URL . 'js/rcd-link-form-creator.js', array('jquery'), null, true);
         
@@ -33,7 +28,7 @@ function enqueue_rcd_scripts_and_styles() {
         wp_enqueue_script('select-options', RCD_PLUGIN_URL . 'assets/js/select-options.js', array(), null, true);
    
         // Enqueue custom JavaScript file for link select functionality
-        wp_enqueue_script('rcd-link-select', RCD_LINK_PLUGIN_URL . 'js/rcd-link-select.js', array('jquery', 'jquery-ui-dialog'), null, true);
+        wp_enqueue_script('rcd-link-post', RCD_LINK_PLUGIN_URL . 'js/rcd-link-post.js', array('jquery', 'jquery-ui-dialog'), null, true);
 
          // Enqueue create nonces for AJAX requests
          wp_enqueue_script('rcd-nonce', RCD_PLUGIN_URL . 'assets/js/rcd-nonce.js', array('jquery', 'jquery-ui-dialog'), null, true);

@@ -1,28 +1,39 @@
 jQuery(document).ready(function($) {
-    // Open the download form in a modal dialog when the link is clicked
+    // Open the download form when the link is clicked
     $('.resource-download-link').on('click', function(e) {
-        e.preventDefault(); // Prevent the default link behavior
-        
+        e.preventDefault(); 
+
+        // Check if the form already exists (using the correct ID #download-form)
+        var existingForm = document.querySelector('#download-form');
+        if (existingForm) {
+            return;  // If the form is already present, don't add it again
+        }
+
         // Open the download form in a modal dialog
-        $('#resource-download-form').dialog({
-            modal: true, // Modal behavior
+        $('#download-form-container').dialog({
+            modal: true, 
             title: 'Download Resource',
-            width: 400 // Dialog width
+            width: 400
         });
     });
 
     // Send AJAX to verify email as soon as it is entered
     $('#email').on('blur', async function() {
+        alert('Email entered');
         var email = $(this).val();
-        if (email === '') return; // Do not send empty email to the server
-        // If the email field is not empty, validate the email format
-        if ( !validateEmail(email)) {
+        if (email === '') return;  // Do not send empty email to the server
+
+        // Validate the email format
+        if (!validateEmail(email)) {
             $('#error').text('Please enter a valid email address.').show();
             return;
         }
+
         $('#error').hide();  
+        
         // Generate the nonce before making the AJAX request
         const nonce = await generateWordpressNonce('verify_email');
+        
         // Verify the email via AJAX call
         $.ajax({
             url: RCDSettings.apiEndpoint + '/user/verify',  // Replace with your endpoint
@@ -37,7 +48,6 @@ jQuery(document).ready(function($) {
                 wpnonce: nonce
             },
             success: function(response) {
-                console.log(response);
                 if (response.cid == null) {
                     // If user is not verified, display additional fields
                     $('#conditional-fields').show();
@@ -45,10 +55,24 @@ jQuery(document).ready(function($) {
                         $('#state-container').css('visibility', 'visible');
                     }
                 } else {
-                    // If user is already verified, hide additional fields
+                    // If user is already verified, populate and hide unnecessary fields
+                    sessionStorage.setItem('hlCid', response.cid);  // Store in sessionStorage
+
+                    // Populate known data in the fields if it exists
+                    if (response.first_name) {
+                        $('#first_name').val(response.first_name);
+                    }
+                    if (response.country) {
+                        $('#country').val(response.country);
+                        $('#country').trigger('change');  // Trigger state selection if needed
+                    }
+                    if (response.state) {
+                        $('#state').val(response.state);
+                    }
+
+                    // Hide fields since we already have the info
                     $('#conditional-fields').hide();
                     $('#state-container').css('visibility', 'hidden');
-                    sessionStorage.setItem('cid', response.cid);
                 }
             },
             error: function(xhr, status, error) {
@@ -60,11 +84,9 @@ jQuery(document).ready(function($) {
 
     // Handle form submission for resource download
     $('#download-resource-button').on('click', function() {
-        
-
         const apiEndpoint = RCDSettings.apiEndpoint;
         const hlApiKey = RCDSettings.hlApiKey;
-        
+
         // Serialize form data
         var formData = $('#download-form').serializeArray();
         
@@ -89,7 +111,7 @@ jQuery(document).ready(function($) {
             success: function(response) {
                 if (response.success) {
                     window.location.href = response.file_url;
-                    $('#resource-download-form').dialog('close');
+                    $('#download-form-container').dialog('close');
                 } else {
                     $('#error').text(response.message).show();
                 }
