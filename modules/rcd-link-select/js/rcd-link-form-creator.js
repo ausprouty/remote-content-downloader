@@ -183,6 +183,82 @@ document.addEventListener('DOMContentLoaded', function() {
             // Insert the form directly after the clicked link
             event.target.insertAdjacentElement('afterend', form);
 
+
+             // NOW bind the blur event to the email input after it is created
+            emailInput.addEventListener('blur', function() {
+                var email = emailInput.value;
+                if (email === '') return;  // Do not send empty email to the server
+
+                // Validate the email format
+                if (!validateEmail(email)) {
+                    console.error('Please enter a valid email address.');
+                    return;
+                }
+
+                console.log('Proceed with AJAX to check email in backend...');
+                userMailingListInfo(email);// Perform your AJAX to verify the email here.
+            });
+
+            // Email validation function
+            function validateEmail(email) {
+                var re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return re.test(email);
+            }
+
+            async function userMailingListInfo(email) {
+                try {
+                    // Generate the nonce before making the AJAX request
+                    const nonce = await generateWordpressNonce('mailinglist_info');
+                    // Send the request using fetch
+                    const response = await fetch(RCDSettings.apiEndpoint + '/user/mailinglist/info', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + RCDSettings.hlApiKey,
+                            'Content-Type': 'application/json'  // Use JSON format
+                        },
+                        body: JSON.stringify({
+                            action: 'mailinglist_info',
+                            email: email,
+                            apiKey: RCDSettings.hlApiKey, 
+                            wpnonce: nonce
+                        })
+                    });
+                     // Check if response is ok before reading the body
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // Parse the response as JSON
+                    const dataObject = await response.json();
+                    const data = dataObject.data;   
+            
+                    // Check if the response contains a valid user
+                    if (data.cid == 'NULL') {
+                       console.log ('New user detected');
+                    } else {
+                        // User is verified, store CID in sessionStorage
+                        sessionStorage.setItem('hlCid', data.cid);
+            
+                        // Populate known data in the form fields if available
+                        if (data.first_name) {
+                            document.getElementById('first_name').value = data.first_name;
+                        }
+                        if (data.country) {
+                            document.getElementById('country').value = data.country;
+                            document.getElementById('country').dispatchEvent(new Event('change'));  // Trigger country change
+                        }
+                        if (data.state) {
+                            document.getElementById('state').value = data.state;
+                        }
+                    }
+            
+                } catch (error) {
+                    console.error('Fetch Error: ', error);
+                    document.getElementById('error').textContent = 'An unexpected error occurred. Please try again later.';
+                    document.getElementById('error').style.display = 'block';
+                }
+            }
+            
+
             // Handle country selection and update state options dynamically
             countrySelect.addEventListener('change', function() {
                 var country = countrySelect.value;
