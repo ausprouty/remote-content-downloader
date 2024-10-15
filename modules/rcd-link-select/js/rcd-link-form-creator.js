@@ -182,9 +182,29 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Insert the form directly after the clicked link
             event.target.insertAdjacentElement('afterend', form);
+            console.log('Form created successfully!');
+            // Populate the form with data from localStorage, if available
+            var storedData = localStorage.getItem('hlCid');
+            console.log (storedData);
+            if (storedData) {
+                var parsedData = JSON.parse(storedData);
+                console.log (parsedData)
+                if (parsedData.email) {
+                    emailInput.value = parsedData.email;
+                }
+                if (parsedData.first_name) {
+                    firstNameInput.value = parsedData.first_name;
+                }
+                if (parsedData.country) {
+                    countrySelect.value = parsedData.country;
+                    countrySelect.dispatchEvent(new Event('change'));  // Trigger change for country
+                }
+                if (parsedData.state) {
+                    stateSelect.value = parsedData.state;
+                }
+            }
 
-
-             // NOW bind the blur event to the email input after it is created
+            // NOW bind the blur event to the email input after it is created
             emailInput.addEventListener('blur', function() {
                 var email = emailInput.value;
                 if (email === '') return;  // Do not send empty email to the server
@@ -236,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
                        console.log ('New user detected');
                     } else {
                         // User is verified, store CID in sessionStorage
-                        sessionStorage.setItem('hlCid', data);
+                        sessionStorage.setItem('hlCid', JSON.stringify(data));
             
                         // Populate known data in the form fields if available
                         if (data.first_name) {
