@@ -230,13 +230,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Parse the response as JSON
                     const dataObject = await response.json();
                     const data = dataObject.data;   
-            
+                    console.log (data);
                     // Check if the response contains a valid user
                     if (data.cid == 'NULL') {
                        console.log ('New user detected');
                     } else {
                         // User is verified, store CID in sessionStorage
-                        sessionStorage.setItem('hlCid', data.cid);
+                        sessionStorage.setItem('hlCid', data);
             
                         // Populate known data in the form fields if available
                         if (data.first_name) {
@@ -253,8 +253,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
                 } catch (error) {
                     console.error('Fetch Error: ', error);
-                    document.getElementById('error').textContent = 'An unexpected error occurred. Please try again later.';
-                    document.getElementById('error').style.display = 'block';
+                  //  document.getElementById('error').textContent = 'An unexpected error occurred. Please try again later.';
+                  //  document.getElementById('error').style.display = 'block';
                 }
             }
             
