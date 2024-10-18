@@ -1,68 +1,42 @@
 <?php
-
-
 function rcd_render_tract_form($tract_type) {
     ob_start();
     ?>
-
-
     <form id="rcd-tract-form" data-form-type="<?php echo esc_attr($tract_type); ?>">
-
         <div>
-            <label for="lang1">I want to share the Gospel with a person who reads:<br></label>
-            <select id="lang1" name="lang1">
-                <option value="">Select a language...
-                </option>
-                <!-- Add options dynamically based on API call if needed -->
-            </select>
+            <label for="lang1">I want to share the Gospel with a person who reads:</label>
+            <select id="lang1" name="lang1" style="display:none;"></select>
         </div>
+
         <?php if ($tract_type === 'bilingual-page' || $tract_type === 'bilingual-book') : ?>
-            <!--  Get the second language options-->
-            <div id="lang2-container" style="visibility:hidden;">
+            <div id="lang2-container">
                 <label for="lang2">I also want the tract to have text in:</label>
-                <select id="lang2" name="lang2" >
-                </select>
+                <select id="lang2" name="lang2" style="display:none;"></select>
             </div>
         <?php endif; ?>
 
-        <!--  Get the audience options-->
-        <div id="audience-container" style="visibility:hidden;">
-            <label for="audience">Audience </label>
-            <select id="audience" name="audience" >
-            </select>
+        <div id="audience-container">
+            <label for="audience">Audience</label>
+            <select id="audience" name="audience" style="display:none;"></select>
         </div>
-            
-        <!--  Get the paper-size options-->
-        <div id="papersize-container" style="visibility:hidden;">
+
+        <div id="papersize-container">
             <label for="papersize">Paper size</label>
-            <select id="papersize" name="papersize" >
-            </select>
+            <select id="papersize" name="papersize" style="display:none;"></select>
         </div>
-        <!--  Get contact options-->
-        <div id="contact-container" style="visibility:hidden;">
-            <label for="contact">
-                For further information, they should contact ministries in:
-            </label>
-            <select id="contact" name="contact" >
-            </select>
+
+        <div id="contact-container">
+            <label for="contact">For further information, they should contact ministries in:</label>
+            <select id="contact" name="contact" style="display:none;"></select>
         </div>
-        <!--  Select Object-->
-        <div id="approval-container" style="visibility:hidden;">
-           <h2>Great! I found the tract you need</h2>
-           <p>Now just a few more questions so I know how to best help you.</p>
-           
+
+        <div id="approval-container" style="display:none;">
+            <h2>Great! I found the tract you need</h2>
+            <p>Now just a few more questions so I know how to best help you.</p>
         </div>
-        
     </form>
     <div id="rcd-tract-results"></div>
     <?php
     return ob_get_clean();
 }
-
 ?>
-
-
-
-
-
-

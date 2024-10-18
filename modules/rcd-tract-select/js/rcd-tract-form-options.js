@@ -1,252 +1,201 @@
-// Wait for the DOM to fully load before executing the script
 document.addEventListener('DOMContentLoaded', function () {
-    // Define the API endpoint from global RCDSettings
     const apiEndpoint = RCDSettings.apiEndpoint;
-
-    // Get the form element by its ID
     const form = document.getElementById('rcd-tract-form');
-    
-    // If the form exists, proceed with the logic
+
     if (form) {
-        // Get the form attributes and elements for different form sections
         const formType = form.getAttribute('data-form-type');
         const lang1Select = form.querySelector('#lang1');
-        const lang2Container = form.querySelector('#lang2-container');
         const lang2Select = form.querySelector('#lang2');
-        const audienceContainer = form.querySelector('#audience-container');
         const audienceSelect = form.querySelector('#audience');
-        const papersizeContainer = form.querySelector('#papersize-container');
         const papersizeSelect = form.querySelector('#papersize');
-        const contactContainer = form.querySelector('#contact-container');
         const contactSelect = form.querySelector('#contact');
         const approvalContainer = form.querySelector('#approval-container');
 
-        // Variables to store selected options
-        let selectedLang1 = '';
-        let selectedLang2 = '';
-        let selectedAudience = '';
-        let selectedPapersize = '';
-        let selectedContact = '';
-
-        // Populate language 1 (lang1) select dropdown on form load
+        // Populate the first language field on load
         populateLang1Select(apiEndpoint, formType);
 
-        /**
-         * Function to populate the lang1 select dropdown with options fetched from the API.
-         * @param {string} apiEndpoint - The base API URL.
-         * @param {string} formType - The type of form (e.g., 'bilingual-book').
-         */
         function populateLang1Select(apiEndpoint, formType) {
             const lang1Url = `${apiEndpoint}/tracts/options/lang1/${formType}`;
-            lang1Select.innerHTML = ''; // Clear any existing options
-
+            console.log(`Fetching from: ${lang1Url}`); // Debug: Log the URL
+        
+            // Clear previous options and add a placeholder
+            clearSelect(lang1Select);
+            addPlaceholder(lang1Select, 'Select a language...');
+        
             fetch(lang1Url)
-            .then(response => response.json())
-            .then(data => {
-                addPlaceholder(lang1Select, 'Select a language...'); // Add a placeholder option
-                data.forEach(item => {
-                    const option = new Option(item.lang1, item.lang1); // Create an option for each language
-                    lang1Select.appendChild(option);
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(item => {
+                            lang1Select.add(new Option(item.lang1, item.lang1));
+                        });
+                        lang1Select.style.display = 'block'; // Make the select field visible
+                    } else {
+                        console.warn('No data found for Lang1'); // Warn if no data returned
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching lang1 data:', error); // Debug: Log any errors
                 });
-            })
-            .catch(error => console.error('Error fetching lang1 data:', error));
+        }
+        
+
+        lang1Select.addEventListener('change', function () {
+            resetSelections('lang1');
+            if (lang1Select.value) {
+                populateLang2Select(apiEndpoint, formType, lang1Select.value);
+            }
+        });
+
+        function populateLang2Select(apiEndpoint, formType, lang1) {
+            const lang2Url = `${apiEndpoint}/tracts/options/lang2/${formType}/${lang1}`;
+            clearSelect(lang2Select);
+            addPlaceholder(lang2Select, 'Select a language...');
+
+            fetch(lang2Url)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        lang2Select.add(new Option(item.lang2, item.lang2));
+                        lang2Select.style.display = 'block'; // Make the select field visible
+                    });
+                })
+                .catch(error => console.error('Error fetching lang2 data:', error));
         }
 
-        // Handle lang1 selection and populate subsequent fields
-        lang1Select.addEventListener('change', function () {
-            selectedLang1 = lang1Select.value;
-            resetSelections('lang1');
+        lang2Select.addEventListener('change', function () {
+            resetSelections('lang2');
+            if (lang2Select.value) {
+                populateAudienceSelect(apiEndpoint, formType, lang1Select.value, lang2Select.value);
+            }
+        });
 
-            // If lang2Container exists (bilingual case), populate lang2 select dropdown
-            if (lang2Container && selectedLang1) {
-                const lang2Url = `${apiEndpoint}/tracts/options/lang2/${formType}/${selectedLang1}`;
-                fetch(lang2Url)
-                    .then(response => response.json())
-                    .then(data => {
-                        lang2Select.innerHTML = '';  // Clear previous options
-                        addPlaceholder(lang2Select, 'Select a language...'); // Add placeholder
-                        data.forEach(item => {
-                            const option = new Option(item.lang2, item.lang2); // Add each lang2 option
-                            lang2Select.appendChild(option);
-                        });
-                        lang2Container.style.visibility = 'visible'; // Show the lang2 container
-                    })
-                    .catch(error => console.error('Error fetching lang2 data:', error));
+        function populateAudienceSelect(apiEndpoint, formType, lang1, lang2 = '') {
+            const audienceUrl = `${apiEndpoint}/tracts/options/audience/${formType}/${lang1}/${lang2}`;
+            clearSelect(audienceSelect);
+            addPlaceholder(audienceSelect, 'Select an audience...');
 
-                // Handle lang2 selection to trigger audience population
-                lang2Select.addEventListener('change', function () {
-                    selectedLang2 = lang2Select.value;
-                    if (selectedLang1 && selectedLang2) {
-                        resetSelections('lang2');
-                        populateAudienceSelect(apiEndpoint, formType, selectedLang1, selectedLang2);
-                    }
-                });
-            } else {
-                // Single-language case: no lang2, so populate audience directly
-                populateAudienceSelect(apiEndpoint, formType, selectedLang1);
+            fetch(audienceUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const seenOptions = new Set();
+                    data.forEach(item => {
+                        if (!seenOptions.has(item.audience)) {
+                            audienceSelect.add(new Option(item.audience, item.audience));
+                            seenOptions.add(item.audience);
+                        }
+                    });
+                    audienceSelect.style.display = 'block'; // Make the select field visible
+                })
+                .catch(error => console.error('Error fetching audience data:', error));
+        }
+
+        audienceSelect.addEventListener('change', function () {
+            resetSelections('audience');
+            if (audienceSelect.value) {
+                populatePapersizeSelect(apiEndpoint, formType, lang1Select.value, lang2Select.value, audienceSelect.value);
+            }
+        });
+
+        function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2, audience) {
+            const papersizeUrl = `${apiEndpoint}/tracts/options/papersize/${formType}/${lang1}/${lang2}/${audience}`;
+            clearSelect(papersizeSelect);
+            addPlaceholder(papersizeSelect, 'Select paper size...');
+
+            fetch(papersizeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const seenOptions = new Set();
+                    data.forEach(item => {
+                        if (!seenOptions.has(item.paper_size)) {
+                            papersizeSelect.add(new Option(item.paper_size, item.paper_size));
+                            seenOptions.add(item.paper_size);
+                            papersizeSelect.style.display = 'block'; // Make the select field visible
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching paper size data:', error));
+        }
+
+        papersizeSelect.addEventListener('change', function () {
+            resetSelections('papersize');
+            if (papersizeSelect.value) {
+                populateContactSelect(apiEndpoint, formType, lang1Select.value, lang2Select.value, audienceSelect.value, papersizeSelect.value);
+            }
+        });
+
+        function populateContactSelect(apiEndpoint, formType, lang1, lang2, audience, papersize) {
+            const contactUrl = `${apiEndpoint}/tracts/options/contacts/${formType}/${lang1}/${lang2}/${audience}/${papersize}`;
+            clearSelect(contactSelect);
+            addPlaceholder(contactSelect, 'Select Country...');
+
+            fetch(contactUrl)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        contactSelect.add(new Option(item.contact, item.contact));
+                    });
+                    contactSelect.style.display = 'block'; // Make the select field visible
+
+                })
+                .catch(error => console.error('Error fetching contact data:', error));
+        }
+
+        contactSelect.addEventListener('change', function () {
+            if (contactSelect.value) {
+                console.log ('Contact selected: ' + contactSelect.value);
+                approvalContainer.style.display = 'block'; // Make the approval container visible
             }
         });
 
         /**
-         * Function to populate the audience select dropdown based on lang1 and lang2.
-         * @param {string} apiEndpoint - The base API URL.
-         * @param {string} formType - The type of form.
-         * @param {string} lang1 - The selected lang1.
-         * @param {string} [lang2] - The selected lang2. (use lang1 for monolingual forms)
+         * Completely resets a <select> element by removing all child options.
+         * @param {HTMLSelectElement} selectElement - The <select> element to clear.
          */
-        function populateAudienceSelect(apiEndpoint, formType, lang1, lang2 = '') {
-            const audienceUrl = `${apiEndpoint}/tracts/options/audience/${formType}/${lang1}/${lang2}`;
-            audienceSelect.innerHTML = '';  // Clear previous options
-
-            fetch(audienceUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    addPlaceholder(audienceSelect, 'Select an audience...');
-                    data.forEach(item => {
-                        const option = new Option(item.audience, item.audience); // Add audience options
-                        audienceSelect.appendChild(option);
-                    });
-                    audienceContainer.style.visibility = 'visible'; // Show audience container
-
-                    // Handle audience selection and populate papersize options
-                    audienceSelect.addEventListener('change', function () {
-                        selectedAudience = audienceSelect.value;
-                        if (selectedAudience) {
-                            resetSelections('audience');
-                            populatePapersizeSelect(apiEndpoint, formType, selectedLang1, selectedLang2, selectedAudience);
-                        }
-                    });
-                } else {
-                    // If no audience is needed, move directly to papersize selection
-                    resetSelections('audience');
-                    populatePapersizeSelect(apiEndpoint, formType, lang1, lang2, null);
-                }
-            })
-            .catch(error => console.error('Error fetching audience data:', error));
+        function clearSelect(selectElement) {
+            while (selectElement.options.length > 0) {
+                selectElement.remove(0); // Remove each option
+            }
+            selectElement.value = ''; // Reset to default value
+            selectElement.style.display = 'none'; // Hide the select field  
         }
 
         /**
-         * Function to populate the papersize select dropdown based on the selected audience.
-         * @param {string} apiEndpoint - The base API URL.
-         * @param {string} formType - The type of form.
-         * @param {string} lang1 - The selected lang1.
-         * @param {string} [lang2] - The selected lang2 . (use lang1 for monolingual forms)
-         * @param {string} [audience] - The selected audience.
-         */
-        function populatePapersizeSelect(apiEndpoint, formType, lang1, lang2, audience) {
-            const papersizeUrl = `${apiEndpoint}/tracts/options/papersize/${formType}/${lang1}/${lang2}/${audience}`;
-            papersizeSelect.innerHTML = '';  // Clear previous options
-
-            fetch(papersizeUrl)
-            .then(response => response.json())
-            .then(data => {
-                addPlaceholder(papersizeSelect, 'Select paper size...');
-                data.forEach(item => {
-                    const option = new Option(item.paper_size, item.paper_size); // Add paper size options
-                    papersizeSelect.appendChild(option);
-                });
-                papersizeContainer.style.visibility = 'visible'; // Show papersize container
-
-                // Handle papersize selection to populate contact options
-                papersizeSelect.addEventListener('change', function () {
-                    selectedPapersize = papersizeSelect.value;
-                    if (selectedPapersize) {
-                        resetSelections('papersize');
-                        populateContactSelect(apiEndpoint, formType, selectedLang1, selectedLang2, selectedAudience, selectedPapersize);
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching papersize data:', error));
-        }
-
-        /**
-         * Function to populate the contact select dropdown.
-         * @param {string} apiEndpoint - The base API URL.
-         * @param {string} formType - The type of form.
-         * @param {string} lang1 - The selected lang1.
-         * @param {string} [lang2] - The selected lang2.
-         * @param {string} [audience] - The selected audience.
-         * @param {string} papersize - The selected paper size.
-         */
-        function populateContactSelect(apiEndpoint, formType, lang1, lang2, audience, papersize) {
-            const contactUrl = `${apiEndpoint}/tracts/options/contacts/${formType}/${lang1}/${lang2}/${audience}/${papersize}`;
-            contactSelect.innerHTML = '';  // Clear previous options
-
-            fetch(contactUrl)
-            .then(response => response.json())
-            .then(data => {
-                addPlaceholder(contactSelect, 'Select Country...');
-                data.forEach(item => {
-                    const option = new Option(item.contact, item.contact); // Add contact options
-                    contactSelect.appendChild(option);
-                });
-                contactContainer.style.visibility = 'visible'; // Show contact container
-
-                // Handle contact selection and fetch tract info
-                contactSelect.addEventListener('change', function () {
-                    selectedContact = contactSelect.value;
-                    if (selectedContact) {
-                        const materialUrl = `${apiEndpoint}/tracts/options/filename/${formType}/${lang1}/${lang2}/${audience}/${papersize}/${selectedContact}`;
-                        fetch(materialUrl)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.length > 0) {
-                                console.log(data);
-                                approvalContainer.style.visibility = 'visible'; // Show approval container
-                            }
-                        })
-                        .catch(error => console.error('Error fetching tract info:', error));
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching contact data:', error));
-        }
-
-        /**
-         * Function to add a placeholder option to a select element.
-         * @param {HTMLSelectElement} selectElement - The select element.
+         * Adds a placeholder option to a <select> element.
+         * @param {HTMLSelectElement} selectElement - The <select> element.
          * @param {string} placeholderText - The placeholder text.
          */
         function addPlaceholder(selectElement, placeholderText) {
             const placeholder = new Option(placeholderText, '');
             placeholder.disabled = true;
             placeholder.selected = true;
-            selectElement.appendChild(placeholder);
+            selectElement.add(placeholder);
         }
 
         /**
-         * Function to reset selections and hide containers based on the current selection level.
-         * @param {string} from - The field from which to reset selections ('lang1', 'lang2', 'audience', 'papersize').
+         * Resets selections based on the field that triggered the reset.
+         * @param {string} from - The field from which to reset ('lang1', 'lang2', 'audience', 'papersize').
          */
         function resetSelections(from) {
             if (from === 'lang1') {
-                lang2Select.innerHTML = '';
-                audienceSelect.innerHTML = '';
-                papersizeSelect.innerHTML = '';
-                contactSelect.innerHTML = '';
-                lang2Container.style.visibility = 'hidden';
-                audienceContainer.style.visibility = 'hidden';
-                papersizeContainer.style.visibility = 'hidden';
-                contactContainer.style.visibility = 'hidden';
-            }
-            if (from === 'lang2') {
-                audienceSelect.innerHTML = '';
-                papersizeSelect.innerHTML = '';
-                contactSelect.innerHTML = '';
-                audienceContainer.style.visibility = 'hidden';
-                papersizeContainer.style.visibility = 'hidden';
-                contactContainer.style.visibility = 'hidden';
-            }
-            if (from === 'audience') {
-                papersizeSelect.innerHTML = '';
-                contactSelect.innerHTML = '';
-                papersizeContainer.style.visibility = 'hidden';
-                contactContainer.style.visibility = 'hidden';
-            }
-            if (from === 'papersize') {
-                contactSelect.innerHTML = '';
-                contactContainer.style.visibility = 'hidden';
+                clearSelect(lang2Select);
+                clearSelect(audienceSelect);
+                clearSelect(papersizeSelect);
+                clearSelect(contactSelect);
+            } else if (from === 'lang2') {
+                clearSelect(audienceSelect);
+                clearSelect(papersizeSelect);
+                clearSelect(contactSelect);
+            } else if (from === 'audience') {
+                clearSelect(papersizeSelect);
+                clearSelect(contactSelect);
+            } else if (from === 'papersize') {
+                clearSelect(contactSelect);
             }
         }
     }
