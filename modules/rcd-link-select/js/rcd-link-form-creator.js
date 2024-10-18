@@ -182,12 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Insert the form directly after the clicked link
             event.target.insertAdjacentElement('afterend', form);
-            console.log('Form created successfully!');
-            // Populate the form with data from localStorage, if available
-            var storedData = localStorage.getItem('hlCid');
-            console.log (storedData);
+            var storedData = sessionStorage.getItem('hlCid');
             if (storedData) {
-                var parsedData = JSON.parse(storedData);
+                var parsedData =  JSON.parse(storedData);
                 console.log (parsedData)
                 if (parsedData.email) {
                     emailInput.value = parsedData.email;
@@ -217,6 +214,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 console.log('Proceed with AJAX to check email in backend...');
                 userMailingListInfo(email);// Perform your AJAX to verify the email here.
+            });
+
+            // Add event listener for the download button
+            submitButton.addEventListener('click', async function() {
+                // Create FormData object and append form fields
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('email', document.getElementById('email').value);
+                formData.append('first_name', document.getElementById('first_name').value);
+                formData.append('country', document.getElementById('country').value);
+                formData.append('state', document.getElementById('state').value);
+                formData.append('prayer', document.getElementById('prayer').value);
+                formData.append('apiKey', RCDSettings.hlApiKey); 
+                const nonce = await generateWordpressNonce('download-resource');
+                formData.append('wpnonce', nonce);
+                formData.append('action', 'download-resource');
+
+                // Add mail list checkboxes
+                mailLists.forEach(function(code) {
+                    var checkbox = document.getElementById(code);
+                    if (checkbox && checkbox.checked) {
+                        formData.append('mail_lists[]', checkbox.value);
+                    }
+                });
+                console.log('Form Data:');
+                for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+                }
+                // Send a POST request with formData to /materials/download
+                fetch(RCDSettings.apiEndpoint + '/materials/download', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + RCDSettings.hlApiKey,
+                    },
+                    body: formData
+
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    // You can handle the success case, such as displaying a success message or starting the download
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // You can handle the error case, such as displaying an error message to the user
+                });
             });
 
             // Email validation function
@@ -250,7 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Parse the response as JSON
                     const dataObject = await response.json();
                     const data = dataObject.data;   
-                    console.log (data);
                     // Check if the response contains a valid user
                     if (data.cid == 'NULL') {
                        console.log ('New user detected');
