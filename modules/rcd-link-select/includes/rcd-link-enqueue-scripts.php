@@ -4,7 +4,9 @@
 function enqueue_rcd_scripts_and_styles() {
     // Check if the shortcode exists on the page
     global $post;
-    if (has_shortcode($post->post_content, 'rcd_link_select')) {
+    if (
+        has_shortcode($post->post_content, 'rcd_link_select') ||
+        has_shortcode($post->post_content, 'rcd_tract_select') ) {
          // Enqueue jQuery (usually not necessary as it's often loaded by WordPress)
         if (!wp_script_is('jquery', 'enqueued')) {
             wp_enqueue_script('jquery');

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const apiEndpoint = RCDSettings.apiEndpoint;
+    const ajaxurl = RCDSettings.ajaxurl; // Access the localized AJAX URL
     const form = document.getElementById('rcd-tract-form');
 
     if (form) {
@@ -9,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const audienceSelect = form.querySelector('#audience');
         const papersizeSelect = form.querySelector('#papersize');
         const contactSelect = form.querySelector('#contact');
-        const approvalContainer = form.querySelector('#approval-container');
+        const downloadContainer = form.querySelector('#download-container');
 
         // Populate the first language field on load
         populateLang1Select(apiEndpoint, formType);
@@ -149,9 +150,71 @@ document.addEventListener('DOMContentLoaded', function () {
         contactSelect.addEventListener('change', function () {
             if (contactSelect.value) {
                 console.log ('Contact selected: ' + contactSelect.value);
-                approvalContainer.style.display = 'block'; // Make the approval container visible
+                showDownloadContainer();
+                downloadContainer.style.display = 'block'; // Make the download container visible
             }
         });
+
+        function showDownloadContainer() {
+            // Get the container and mail lists
+            const downloadContainer = document.getElementById('download-container');
+            const mailLists = 'tracts,followup';
+        
+            // Get the selected values from each <select> element
+            const lang1Value = document.getElementById('lang1').value;
+            const lang2Value = document.getElementById('lang2').value;
+            const audienceValue = document.getElementById('audience').value;
+            const papersizeValue = document.getElementById('papersize').value;
+            const contactValue = document.getElementById('contact').value;
+        
+            // Log the selected values for debugging
+            console.log('Selected Values:', { lang1Value, lang2Value, audienceValue, papersizeValue, contactValue });
+        
+            // Construct the download URL using the selected values
+            const downloadUrl = `${apiEndpoint}/tracts/options/filename/${formType}/${encodeURIComponent(lang1Value)}/${encodeURIComponent(lang2Value)}/${encodeURIComponent(audienceValue)}/${encodeURIComponent(papersizeValue)}/${encodeURIComponent(contactValue)}`;
+            console.log('Download URL:', downloadUrl); // Log the URL for debugging
+        
+            // Fetch the file details from the constructed URL
+            fetch(downloadUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Filename:', data.filename);
+        
+                    // Prepare form data for the AJAX request to render the shortcode
+                    const formData = new FormData();
+                    formData.append('action', 'rcd_link_render_dynamic');
+                    formData.append('file', data.filename);
+                    formData.append('name', data.title);
+                    formData.append('mail_lists', mailLists);
+                    // Send the AJAX request to render the shortcode
+                    return fetch(ajaxurl, {
+                        method: 'POST',
+                        body: formData
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`AJAX request failed: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    // Inject the rendered shortcode output into the container
+                    downloadContainer.innerHTML = `<h2>Download</h2><p>${html}</p>`;
+                    downloadContainer.style.display = 'block'; // Make it visible
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Handle errors
+                });
+        }
+        
+        
+        
 
         /**
          * Completely resets a <select> element by removing all child options.

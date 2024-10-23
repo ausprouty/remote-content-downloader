@@ -30,9 +30,9 @@ function rcd_render_tract_form($tract_type) {
             <select id="contact" name="contact" style="display:none;"></select>
         </div>
 
-        <div id="approval-container" style="display:none;">
-            <h2>Great! I found the tract you need</h2>
-            <p>Now just a few more questions so I know how to best help you.</p>
+        <div id="download-container" style="display:none;">
+            <h2>Download </h2>
+           
         </div>
     </form>
     <div id="rcd-tract-results"></div>
