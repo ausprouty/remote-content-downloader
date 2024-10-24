@@ -35,15 +35,16 @@ function enqueue_rcd_scripts_and_styles() {
          // Enqueue create nonces for AJAX requests
          wp_enqueue_script('rcd-nonce', RCD_PLUGIN_URL . 'assets/js/rcd-nonce.js', array('jquery', 'jquery-ui-dialog'), null, true);
         
-        
-         // Enqueue add state to form functionality
-        //wp_enqueue_script('add-state-to-form', RCD_PLUGIN_URL . 'assets/js/add-state-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);
-        
-        // Enqueue add mail list to form functionality
-        //wp_enqueue_script('add-mail-lists-to-form', RCD_PLUGIN_URL . 'assets/js/add-mail-lists-to-form.js', array('jquery', 'jquery-ui-dialog'), null, true);     
-        
+          
         // Enqueue custom CSS file for the form
         wp_enqueue_style('rcd-link-select-css', plugin_dir_url(__FILE__) . '../css/rcd-link-select.css', array(), null, 'all');
+        
+         // local values to pass to the script
+
+          // Pass AJAX URL and nonce to the script
+        wp_localize_script('rcd-tract-form-options', 'linkScriptData', array(
+            'wp_nonce'   => wp_create_nonce('download-resource')
+        ));
 
     }
 }
