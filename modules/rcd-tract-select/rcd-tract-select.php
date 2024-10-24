@@ -61,7 +61,7 @@ function rcd_tract_check_enqueue_scripts() {
         // Pass AJAX URL and nonce to the script
         wp_localize_script('rcd-tract-form-options', 'myScriptData', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce('rcd_link_render_dynamic_nonce')
+            'wp_nonce'   => wp_create_nonce('rcd_link_render_dynamic_nonce')
         ));
 
         wp_enqueue_style('rcd-tract-select-css', RCD_TRACT_PLUGIN_URL . 'css/rcd-tract-select.css');

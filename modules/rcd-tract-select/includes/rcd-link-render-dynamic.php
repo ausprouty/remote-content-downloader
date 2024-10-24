@@ -6,7 +6,7 @@ function rcd_link_render_dynamic() {
     error_log('rcd_link_render_dynamic was triggered');
 
      // Verify the nonce
-     if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'rcd_link_render_dynamic_nonce')) {
+     if (!isset($_POST['wp_nonce']) || !wp_verify_nonce($_POST['wp_nonce'], 'rcd_link_render_dynamic_nonce')) {
         wp_send_json_error('Invalid nonce'); // Send error if nonce fails
         wp_die(); // Terminate the request
     }

@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const apiEndpoint = RCDSettings.apiEndpoint;
     const ajaxurl = myScriptData.ajaxurl; // Access the localized AJAX URL
     const form = document.getElementById('rcd-tract-form');
-    const nonce = myScriptData.nonce; 
-    console.log ('nonce:' + nonce);  
+    const wp_nonce = myScriptData.wp_nonce; 
+ 
 
     if (form) {
         const formType = form.getAttribute('data-form-type');
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     formData.append('file', data.filename);
                     formData.append('name', data.title);
                     formData.append('mail_lists', mailLists);
-                    formData.append('wpnonce', nonce);
+                    formData.append('wp_nonce', wp_nonce);
                     console.log (ajaxurl);
                     console.log([...formData.entries()]);
                     // Send the AJAX request to render the shortcode
