@@ -175,7 +175,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // Construct the download URL using the selected values
             const downloadUrl = `${apiEndpoint}/tracts/options/filename/${formType}/${encodeURIComponent(lang1Value)}/${encodeURIComponent(lang2Value)}/${encodeURIComponent(audienceValue)}/${encodeURIComponent(papersizeValue)}/${encodeURIComponent(contactValue)}`;
             console.log('Download URL:', downloadUrl); // Log the URL for debugging
-            
+            // let person know then need to wait    
+
+            downloadContainer.style.display = 'block'; // Make it visible
+            downloadContainer.innerHTML = '<p>Please wait while we prepare your download...</p>';
             // Fetch the file details from the constructed URL
             fetch(downloadUrl)
                 .then(response => {
@@ -213,8 +216,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(html => {
                     // Inject the rendered shortcode output into the container
-                    downloadContainer.innerHTML = `<h2>Download</h2><p>${html}</p>`;
-                    downloadContainer.style.display = 'block'; // Make it visible
+                    downloadContainer.innerHTML = `<p>${html}</p>`;
+                    downloadContainer.style.display = 'hidden'; // Make it visible
+                    var downloadLink = document.querySelector('.resource-download-link');
+                    handleDownloadClick(downloadLink);
                 })
                 .catch(error => {
                     console.error('Error:', error); // Handle errors
@@ -258,15 +263,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 clearSelect(audienceSelect);
                 clearSelect(papersizeSelect);
                 clearSelect(contactSelect);
+                downloadContainer.innerHTML = ''; // Clear the download container
             } else if (from === 'lang2') {
                 clearSelect(audienceSelect);
                 clearSelect(papersizeSelect);
                 clearSelect(contactSelect);
+                downloadContainer.innerHTML = ''; // Clear the download container
             } else if (from === 'audience') {
                 clearSelect(papersizeSelect);
                 clearSelect(contactSelect);
+                downloadContainer.innerHTML = ''; // Clear the download container
             } else if (from === 'papersize') {
                 clearSelect(contactSelect);
+                downloadContainer.innerHTML = ''; // Clear the download container
             }
         }
     }

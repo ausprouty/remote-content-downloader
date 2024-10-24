@@ -31,7 +31,7 @@ function rcd_render_tract_form($tract_type) {
         </div>
 
         <div id="download-container" style="display:none;">
-            <h2>Download </h2>
+          
            
         </div>
     </form>
