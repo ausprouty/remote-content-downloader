@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const apiEndpoint = RCDSettings.apiEndpoint;
-    const ajaxurl = RCDSettings.ajaxurl; // Access the localized AJAX URL
+    const ajaxurl = myScriptData.ajaxurl; // Access the localized AJAX URL
     const form = document.getElementById('rcd-tract-form');
+    const nonce = myScriptData.nonce; 
+    console.log ('nonce:' + nonce);  
 
     if (form) {
         const formType = form.getAttribute('data-form-type');
@@ -173,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Construct the download URL using the selected values
             const downloadUrl = `${apiEndpoint}/tracts/options/filename/${formType}/${encodeURIComponent(lang1Value)}/${encodeURIComponent(lang2Value)}/${encodeURIComponent(audienceValue)}/${encodeURIComponent(papersizeValue)}/${encodeURIComponent(contactValue)}`;
             console.log('Download URL:', downloadUrl); // Log the URL for debugging
-        
+            
             // Fetch the file details from the constructed URL
             fetch(downloadUrl)
                 .then(response => {
@@ -182,20 +184,26 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return response.json();
                 })
+                .then(
+                    
+                )
+
                 .then(data => {
                     console.log('Filename:', data.filename);
-        
                     // Prepare form data for the AJAX request to render the shortcode
                     const formData = new FormData();
                     formData.append('action', 'rcd_link_render_dynamic');
                     formData.append('file', data.filename);
                     formData.append('name', data.title);
                     formData.append('mail_lists', mailLists);
+                    formData.append('wpnonce', nonce);
+                    console.log (ajaxurl);
+                    console.log([...formData.entries()]);
                     // Send the AJAX request to render the shortcode
                     return fetch(ajaxurl, {
                         method: 'POST',
-                        body: formData
-                    });
+                        body: formData,
+                    })
                 })
                 .then(response => {
                     if (!response.ok) {
