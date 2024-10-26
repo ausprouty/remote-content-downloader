@@ -4,13 +4,21 @@
 
 // Define mailing lists
 $mail_list_options = array(
-    'followup' => 'Tell me how to help new Christians grow',
-    'tips' => 'Send me tips on how to use this material',
-    'start' => 'Give me ideas for starting my first group',
-    'multiply' => 'I want to know how to get my groups to multiply',
-    'weekly' => 'Receive weekly emails',
-    'abc' => 'ABC\'s of Evangelism and Discipleship',
-    'habits' => 'Habits of effective evangelists'
+    'ABC' => 'ABC\'s of Evangelism and Discipleship',
+    'Followup' => 'Give me ideas on how to help new Christians grow',
+    'Habits' => 'Habits of effective evangelists',
+    'Hindus' => 'Give me ideas on how to connect Hindus to Jesus',
+    'DBSmultiply' => 'I want to know how to get my groups to multiply',
+    'DBSstart' => 'Give me ideas for starting my first group',
+	'DBSlifeprinciples' => 'Tell me more about Life Principles',
+	'DBSleadership' => 'Tell me more about Leadership Series',
+    'Holiday' => 'Send me some tips in sharing my faith during holidays',
+	'MyFriends' => 'I want to know more about the MyFriends Lifestyle',
+    'Tips' => 'Send me tips on how to use this material',
+    'Weekly' => 'I want to receive evangelism tips from an experienced cross-cultural evangelist',
+	'Tracts' => 'Send me ideas on how to use these tracts effectively',
+
+
 );
 
 $us_state_options = [
