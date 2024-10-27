@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
 
     // Handle form submission for resource download
     $('#download-resource-button').on('click', function() {
-        const apiEndpoint = RCDSettings.apiEndpoint;
+        const apiEndpoint = RCDSettings.hlApiEndpoint;
         const hlApiKey = RCDSettings.hlApiKey;
 
         // Serialize form data

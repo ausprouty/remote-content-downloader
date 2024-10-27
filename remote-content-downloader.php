@@ -68,7 +68,8 @@ function rcd_localize_variables() {
     // Localize data (API endpoint and API key)
     $localize_data = array(
         'ajaxurl' => admin_url('admin-ajax.php'), // Set AJAX URL
-        'apiEndpoint' => defined('API_ENDPOINT') ? API_ENDPOINT : '',
+        'hlApiEndpoint' => defined('HL_API_ENDPOINT') ? HL_API_ENDPOINT : '',
+        'mylanguageApiEndpoint' => defined('MYLANGUAGE_API_ENDPOINT') ? MYLANGUAGE_API_ENDPOINT : '',
         'hlApiKey'    => defined('HL_API_KEY') ? HL_API_KEY : '',
         'hlNonceSalt'=> defined('WORDPRESS_HL_NONCE_SALT') ? WORDPRESS_HL_NONCE_SALT : '',
     );

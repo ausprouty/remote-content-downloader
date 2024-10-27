@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const apiEndpoint = RCDSettings.apiEndpoint;
+    const apiEndpoint = RCDSettings.hlApiEndpoint;
     const ajaxurl = myScriptData.ajaxurl; // Access the localized AJAX URL
     const form = document.getElementById('rcd-tract-form');
     const wp_nonce = myScriptData.wp_nonce; 

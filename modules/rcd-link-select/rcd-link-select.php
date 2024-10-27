@@ -17,8 +17,6 @@ include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-form.php';
 include_once RCD_LINK_PLUGIN_DIR . 'includes/rcd-link-enqueue-scripts.php';
 
 
-
-
 /**
  * Shortcode handler for rendering the download link with popup form
  *
@@ -29,6 +27,7 @@ function rcd_link_select_shortcode($atts) {
     // Extract shortcode attributes
     $attributes = shortcode_atts(array(
         'file' => '',
+        'session' => '',
         'name' => '',
         'mail_lists' => array()
     ), $atts);

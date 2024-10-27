@@ -25,7 +25,7 @@ add_action('all', function($hook_name) {
 function rcd_tract_select_form($atts) {
     // Include the form rendering file
     include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-tract-form-renderer.php';
-    include_once RCD_TRACT_PLUGIN_DIR . 'includes/rcd-link-render-dynamic.php'; // Corrected constant
+    include_once RCD_PLUGIN_DIR . 'includes/rcd-link-render-dynamic.php'; // Corrected constant
 
     // Set default attributes and merge with incoming attributes
     $atts = shortcode_atts(array(
